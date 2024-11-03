@@ -3,6 +3,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Wet+Paint&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Itim&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik+Wet+Paint&display=swap');
 
+
+html{
+    scroll-behavior: smooth;
+    
+}
 #page-container {
     width: 100%;
     height: 100vh;
@@ -136,9 +141,11 @@
     fill: #9747FF;
 
 }
-#Profileimg{
+
+#Profileimg {
     filter: drop-shadow(2px 4px 8px rgba(34, 34, 34, 0.8));
 }
+
 /* Occupation  */
 #occupation h2 {
     font-size: clamp(18px, 2.5vw, 18px);
@@ -153,29 +160,46 @@
 
 /* social links */
 #sociallinks {
-    padding: 30px;
+    padding: 20px;
     display: flex;
     justify-content: space-around;
     flex-direction: column;
 }
-.sociallink{
+
+.sociallink {
     margin-left: 30px;
     display: flex;
-    gap: 10px;
+    gap: 20px;
 }
-#sociallinks h2{
+
+#sociallinks h2 {
     font-size: clamp(18px, 2.5vw, 18px);
     color: white;
+    padding: 10px;
 }
+
 #sociallinks button {
     font-size: clamp(18px, 3.5vw, 85px);
     background: transparent;
     color: white;
     border: none;
-    transform: rotateX(45deg);
+    transform: rotateX(30deg);
     border: 1px solid white;
     border-radius: 100%;
     padding: 15px;
+    transition: 0.5s;
+    margin-top: 10px;
+    box-shadow: 2px 3px 5px rgba(142, 0, 150, 0.3);
+
+
+}
+
+#sociallinks button:hover {
+    transform: scale(1.03);
+    border: 1px solid #9747FF;
+    box-shadow: 2px 3px 5px rgba(142, 0, 150, 0.3);
+    box-shadow: inset 3px 4px 5px rgba(144, 144, 144, 0.2);
+
 }
 
 /* quotes */
@@ -194,7 +218,7 @@
 #experience {
     color: white;
     padding: 20px;
-  
+
 }
 
 #experience h2 {
@@ -216,33 +240,39 @@
 #skills {
     grid-column: span 2;
     grid-row: span 2;
-    z-index:1;
+    z-index: 1;
 }
-#skills h2{
+
+#skills h2 {
     font-size: clamp(18px, 2.5vw, 25px);
     color: white;
 
 }
-#skills .skillmarque{
+
+#skills .skillmarque {
     padding: 10px;
     margin-top: 20px;
 }
-#skills .skillcontent{
-display: flex;
-flex-direction: row;
-align-items: center;
-margin-top: 30px;
+
+#skills .skillcontent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 30px;
 }
-.skillcontent h2{
+
+.skillcontent h2 {
     padding: 10px;
     padding-top: 30px;
     font-size: clamp(18px, 2.5vw, 25px);
     font-weight: 700;
 
 }
-.sociallink{
+
+.sociallink {
     display: flex;
 }
+
 .marquee {
     overflow: hidden;
     white-space: nowrap;
@@ -257,27 +287,33 @@ margin-top: 30px;
 .marquee-content img {
     margin-right: 20px;
 }
-.background-skill{
+
+.background-skill {
     position: absolute;
     overflow: hidden;
-  width: 430px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: -1;
+    width: 430px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
 }
-.anim, .anim svg {
+
+.anim,
+.anim svg {
     position: relative;
     width: 100%;
     height: 100%;
-  }
-  .anim path {
+}
+
+.anim path {
     stroke-width: 2;
-  }
+}
+
 @keyframes scroll {
     from {
         transform: translateX(0);
     }
+
     to {
         transform: translateX(-50%);
     }
@@ -286,6 +322,7 @@ margin-top: 30px;
 #achievments {
     grid-row: span 2;
 }
+
 /* github */
 #github {
     grid-column: span 2;
@@ -297,84 +334,145 @@ margin-top: 30px;
 }
 
 /* Certifications */
-.certi-content{
+.certi-content {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-   margin-top: 10px;
+    margin-top: 10px;
 }
-#certifications{
+
+#certifications {
     padding: 10px;
 }
-#certifications h2{
+
+#certifications h2 {
     font-size: clamp(18px, 2.5vw, 18px);
     color: white;
     padding: 10px;
 }
-.certi-content h2{
+
+.certi-content h2 {
     padding: 10px;
     font-size: clamp(18px, 2.5vw, 23px);
-color: white;
+    color: white;
 }
-#moreicon{
+
+#moreicon {
     position: absolute;
     right: 40px;
     top: 110%;
     cursor: pointer;
 }
+
 /* github */
 
-#github{
+#github {
     width: 100%;
     padding: 20px;
     height: 300px;
 }
-#github h2{
+
+#github h2 {
     font-size: clamp(18px, 2.5vw, 18px);
     color: white;
     padding: 10px;
 }
-#githubmain{
+
+#githubmain {
     width: 100%;
-  height: 180px;
+    height: 180px;
 }
+
 /* projects */
-#project{
+#project {
     padding: 20px;
 }
-#project h2{
+
+#project h2 {
     font-size: clamp(18px, 2.5vw, 18px);
     color: white;
     padding: 10px;
 }
-#moreicon2{
+
+#moreicon2 {
     left: 22%;
     top: 110%;
     cursor: pointer;
     position: absolute;
 }
+
 /* achievements */
-#achievments{
+#achievments {
     padding: 20px;
+    transition: 0.5s;
 }
-#achievments h2{
+
+#achievments h2 {
     font-size: clamp(18px, 2.5vw, 18px);
     color: white;
 }
-#moreicon3{
+
+#moreicon3 {
     position: absolute;
     right: 40px;
     top: 55%;
     cursor: pointer;
 }
-.achievements-content{
+
+.achievements-content {
     margin-top: 30px;
 }
-.achievements-content h2{
+
+.achievements-content h2 {
     margin-top: 30px;
     line-height: 1.1;
 }
-img{
+
+img {
     border-radius: 10px;
 }
+
+/* Responsive */
+
+/* Extra Small Devices (Portrait Phones, less than 576px) */
+@media screen and (max-width: 575.98px) {
+    #page-sections {
+        display: flex;
+        flex-direction: column;
+
+    }
+}
+
+/* Small Devices (Landscape Phones, 576px and up) */
+@media only screen and (min-width: 576px) and (max-width: 767.98px) {}
+
+/* Medium Devices (Tablets, 768px and up) */
+@media only screen and (min-width: 768px) and (max-width: 991.98px) {}
+
+/* Large Devices (Desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1199.98px) {}
+
+/* Extra Large Devices (Large Desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) and (max-width: 1399.98px) {}
+
+/* Super Large Devices (Ultra-Wide Screens, 1400px and up) */
+@media only screen and (min-width: 1400px) {}
+
+
+/* scroll bar  */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+
+::-webkit-scrollbar-thumb {
+    background-color: #9747FF;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #7d37cc;
+}
+
+
