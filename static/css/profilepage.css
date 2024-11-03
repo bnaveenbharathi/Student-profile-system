@@ -439,6 +439,9 @@ img {
 
 /* Extra Small Devices (Portrait Phones, less than 576px) */
 @media screen and (max-width: 575.98px) {
+    html{
+        overflow-x: hidden;
+    }
     #page-sections {
         display: flex;
         flex-direction: column;
@@ -473,6 +476,19 @@ img {
     }
     #github{
         order: 10;
+    }
+    #moreicon3 {
+        top: 240%;
+    }
+    #moreicon2{
+        top: 295%;
+        left: 90%;
+    }
+    #moreicon{
+        top: 342%;
+    }
+    .background-skill{
+        width: 280px;
     }
 }
 
