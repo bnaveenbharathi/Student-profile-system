@@ -20,7 +20,6 @@ button{
     transform: translate(-50%, -50%);
     position: absolute;
     z-index: 1;
-    /* border: 1px solid orange; */
 }
 
 .top-bar {
@@ -443,7 +442,37 @@ img {
     #page-sections {
         display: flex;
         flex-direction: column;
-
+    }
+    #profile{
+        order: 1;
+        height: 55vh;
+    }
+    #occupation{
+        order: 2;
+    }
+    #quotes{
+        order: 3;
+    }
+    #experience{
+        order: 4;
+    }
+    #sociallinks{
+        order: 5;
+    }
+    #skills{
+        order: 6;
+    }
+    #achievments{
+        order: 7;
+    }
+    #project{
+        order: 8;
+    }
+    #certifications{
+        order: 9;
+    }
+    #github{
+        order: 10;
     }
 }
 
