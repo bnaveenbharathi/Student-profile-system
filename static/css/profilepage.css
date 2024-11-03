@@ -2,18 +2,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Wet+Paint&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Wet+Paint&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Itim&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik+Wet+Paint&display=swap');
-#page-container{
+
+#page-container {
     width: 100%;
     height: 100vh;
     max-width: 1300px;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     position: absolute;
     z-index: 1;
     /* border: 1px solid orange; */
 }
-.top-bar{
+
+.top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -24,66 +26,72 @@
     margin-top: 40px;
     border: 1px solid rgb(53, 39, 83);
     background: radial-gradient(circle at 30% 10%, rgba(0, 26, 77, 0.7), rgba(0, 26, 77, 1.2) 100%);
-   box-shadow: 3px 5px 8px rgba(0,0,0,0.2);
+    box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.2);
 }
-.top-bar h2{
+
+.top-bar h2 {
     color: white;
-    font-size: clamp(18px,3.5vw,30px);
+    font-size: clamp(18px, 3.5vw, 30px);
     margin-left: 10px;
     font-family: "Rubik Wet Paint", system-ui;
     font-weight: 400;
     font-style: normal;
 }
-.font1{
+
+.font1 {
     font-family: "Kanit", sans-serif;
     font-weight: 700;
     font-style: normal;
 }
-.font2{
+
+.font2 {
     font-family: "Kanit", serif;
     font-weight: 800;
     font-style: italic;
 }
-#back-button button{
- padding: 10px;
- background: #9747FF;
- color: white;
- border-radius: 50%;
+
+#back-button button {
+    padding: 10px;
+    background: #9747FF;
+    color: white;
+    border-radius: 50%;
     font-size: 30px;
     border: 1px solid #9747FF;
     transform: rotateX(30deg);
 }
-.box{
+
+.box {
     width: 100%;
     padding: 30px;
     border: 1px solid rgb(53, 39, 83);
-    background: radial-gradient(circle at 30% 10%, rgba(0, 26, 77, 0.9), rgba(0, 26, 77, 1) 100%);
-   box-shadow: 3px 5px 8px rgba(142, 0, 150, 0.3);
-   border-radius: 10px;
-   
+    background: radial-gradient(circle at 30% 10%, rgba(0, 15, 81, 0.705), rgb(8, 0, 70) 100%);
+    box-shadow: 3px 5px 8px rgba(142, 0, 150, 0.3);
+    border-radius: 10px;
+
 }
-#page-sections{
+
+#page-sections {
     margin-top: 40px;
     width: 100%;
     height: auto;
-display: grid;
-grid-template-columns:repeat(4,1fr) ;
-grid-template-rows:repeat(3,180px) ;
-padding: 10px;
-gap: 15px;
-overflow:auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 180px);
+    padding: 10px;
+    gap: 15px;
+    overflow: auto;
 }
+
 /* profile section */
-#profile{
+#profile {
     grid-row: span 2;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     align-items: center;
-
-  
 }
-.profile-content{
+
+.profile-content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -91,56 +99,75 @@ overflow:auto;
     perspective: 1px;
     align-items: center;
     transform-style: preserve-3d;
-    transform: translateZ(100px); 
+    transform: translateZ(100px);
 }
-.profile-content img{
+
+.profile-content img {
     border-radius: 50%;
 }
-.profile-content  button{
+
+.profile-content button {
     width: 100%;
     padding: 10px;
     border: 1px solid #9747FF;
     background: #9747FF;
-    border-radius:6px ;
+    border-radius: 6px;
     color: white;
 }
-.profile-content div{
+
+.profile-content div {
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 200px;
 }
-.svg-container{
-    display: inline-block; 
-    transition: 0.8s; 
+
+.svg-container {
+    display: inline-block;
+    transition: 0.8s;
 }
-.svg-container:hover{
+
+.svg-container:hover {
     cursor: pointer;
 }
+
 .svg-container:hover svg path {
-    fill: #9747FF; 
-   
+    fill: #9747FF;
+
 }
+
 /* Occupation  */
-#occupation h2{
-    font-size: clamp(18px,2.5vw,18px);
-  color: white;
-}
-#occupation h3{
-    padding-top: 30px;
-    font-size: clamp(18px,2.5vw,25px);
+#occupation h2 {
+    font-size: clamp(18px, 2.5vw, 18px);
     color: white;
 }
+
+#occupation h3 {
+    padding-top: 30px;
+    font-size: clamp(18px, 2.5vw, 25px);
+    color: white;
+}
+
 /* social links */
-#sociallinks{
+#sociallinks {
     padding: 30px;
     display: flex;
     justify-content: space-around;
+    flex-direction: column;
 }
-#sociallinks button{
-    font-size: clamp(18px,3.5vw,85px);
-    background:transparent ;
+.sociallink{
+    margin-left: 30px;
+    display: flex;
+    gap: 10px;
+}
+#sociallinks h2{
+    font-size: clamp(18px, 2.5vw, 18px);
+    color: white;
+}
+#sociallinks button {
+    font-size: clamp(18px, 3.5vw, 85px);
+    background: transparent;
     color: white;
     border: none;
     transform: rotateX(45deg);
@@ -148,28 +175,146 @@ overflow:auto;
     border-radius: 100%;
     padding: 15px;
 }
+
 /* quotes */
-#quotes h2{
-    font-size: clamp(18px,2.5vw,18px);
-  color: white;
-}
-#quotes h3{
-    padding-top: 30px;
-    font-size: clamp(18px,2.5vw,25px);
+#quotes h2 {
+    font-size: clamp(18px, 2.5vw, 18px);
     color: white;
 }
-#skills{
+
+#quotes h3 {
+    padding-top: 30px;
+    font-size: clamp(18px, 2.5vw, 25px);
+    color: white;
+}
+
+/* experience */
+#experience {
+    color: white;
+    padding: 20px;
+  
+}
+
+#experience h2 {
+    font-size: clamp(18px, 2.5vw, 24px);
+    padding: 5px;
+    color: #9747FF;
+
+}
+
+#experience p {
+    padding: 5px;
+    font-size: clamp(14px, 15px, 18px);
+    font-family: "Kanit", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* skills */
+#skills {
     grid-column: span 2;
     grid-row: span 2;
 }
-#achievments{
+#skills h2{
+    font-size: clamp(18px, 2.5vw, 25px);
+    color: white;
+
+}
+#skills .skillmarque{
+    padding: 10px;
+    margin-top: 20px;
+}
+#skills .skillcontent{
+display: flex;
+flex-direction: row;
+align-items: center;
+margin-top: 30px;
+}
+.skillcontent h2{
+    padding: 10px;
+    padding-top: 30px;
+    font-size: clamp(18px, 2.5vw, 25px);
+    font-weight: 700;
+
+}
+.sociallink{
+    display: flex;
+}
+.marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+}
+
+.marquee-content {
+    display: inline-flex;
+    animation: scroll 8s linear infinite;
+}
+
+.marquee-content img {
+    margin-right: 20px;
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+#achievments {
     grid-row: span 2;
 }
-#github{
+
+#github {
     grid-column: span 2;
-    height: 280px;
-}
-#github{
     height: 280px;
 }
 
+#github {
+    height: 280px;
+}
+/* Certifications */
+.certi-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+   margin-top: 10px;
+}
+#certifications{
+    padding: 10px;
+}
+#certifications h2{
+    font-size: clamp(18px, 2.5vw, 18px);
+    color: white;
+    padding: 10px;
+}
+.certi-content h2{
+    padding: 10px;
+    font-size: clamp(18px, 2.5vw, 23px);
+color: white;
+}
+#moreicon{
+    position: absolute;
+    right: 40px;
+    top: 110%;
+    cursor: pointer;
+}
+/* github */
+
+#github{
+    width: 100%;
+    padding: 20px;
+}
+#github h2{
+    font-size: clamp(18px, 2.5vw, 18px);
+    color: white;
+    padding: 10px;
+}
+#githubmain{
+    width: 100%;
+  height: 180px;
+}
