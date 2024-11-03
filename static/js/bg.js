@@ -254,3 +254,14 @@ window.addEventListener("mousemove",function(e){
 	},{duration:500,fill:"forwards"})
 
 })
+
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () {
+        document.querySelector('.loader').style.display = 'none';
+        const pageContainer = document.querySelector('#page-container');
+        pageContainer.style.display = 'block';
+        setTimeout(() => {
+            pageContainer.classList.add('show');
+        }, 20);
+    }, 2000);
+});

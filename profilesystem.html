@@ -14,6 +14,7 @@
         integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/181ea7bd20.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <!-- style -->
     <link rel="stylesheet" href="./static/css/bg.css">
     <link rel="stylesheet" href="./static/css/profilepage.css">
@@ -21,28 +22,35 @@
 </head>
 
 <body>
-<!-- background animation -->
+    <div class="loadermake">
+        <div class="loader"></div>
+    </div>
+    <!-- background animation -->
     <div id="bg">
         <canvas></canvas>
         <canvas></canvas>
         <canvas></canvas>
     </div>
-<!-- cursor animation -->
- <div class="cursor-dot"></div>
- <div class="cursor-outline"></div>
- <!-- Page Container -->
-    <div class="" id="page-container">
+    <!-- cursor animation -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <!-- loading text -->
+
+    <!-- Page Container -->
+    <div class="" id="page-container" style="display: none;">
         <!-- top bar -->
-        <div class="top-bar">
+        <div class="top-bar" data-aos="fade-down">
             <h2>B.Naveen Bharathi</h2>
-            <a href="" id="back-button"><button><i>↗</i></button>
+            <a href="" id="back-button"><button>
+                    <i class="arrow">↗</i>
+                </button>
             </a>
         </div>
-        
-<!-- Main Container -->
+
+        <!-- Main Container -->
         <div class="page-sections" id="page-sections">
             <!-- profile box -->
-            <div id="profile" class="box">
+            <div id="profile" class="box" data-aos="zoom-in">
                 <div class="profile-content">
                     <div id="Profileimg" class="d-flex justify-content-center">
                         <img src="./static/img/profile.png" alt="" width="150px" style="object-fit: cover;">
@@ -65,20 +73,20 @@
                 </div>
             </div>
             <!-- occupation box -->
-            <div id="occupation" class="box">
+            <div id="occupation" class="box" data-aos="zoom-out" data-aos-duration="1000">
 
                 <h2 class="font1">Occupation</h2>
                 <h3 class="font2 mt-2">Full Stack Developer</h3>
 
             </div>
-            <div class="box" id="sociallinks">
+            <div class="box" id="sociallinks" data-aos="zoom-out">
                 <h2 class="font1">Social Links</h2>
                 <div class="sociallink">
                     <button id="socialicon"><i class="fa-brands fa-linkedin"></i></button>
                     <button id="socialicon"><i class="fa-brands fa-github"></i></button>
                 </div>
             </div>
-            <div id="quotes" class="box">
+            <div id="quotes" class="box" data-aos="zoom-out-left">
                 <h2 class="font1">Quote</h2>
                 <h3 class="font2">
                     <marquee behavior="" direction="">Small steps in the right direction can turn out to be the biggest
@@ -292,6 +300,19 @@
     <!-- bg link -->
     <script src="./static/js/bg.js"></script>
     <script src="./static/js/profilepage.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            offset: 120,
+            easing: 'ease',
+            once: false,
+            startEvent: 'DOMContentLoaded',
+            initClassName: 'aos-init',
+            animatedClassName: 'aos-animate',
+        });
+    </script>
+
 
 </body>
 

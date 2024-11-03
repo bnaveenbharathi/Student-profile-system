@@ -4,13 +4,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Itim&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik+Wet+Paint&display=swap');
 
 
-html{
+html {
     scroll-behavior: smooth;
-    
+
 }
-button{
+
+button {
     cursor: none !important;
 }
+
 #page-container {
     width: 100%;
     height: 100vh;
@@ -65,6 +67,12 @@ button{
     font-size: 30px;
     border: 1px solid #9747FF;
     transform: rotateX(30deg);
+    transition: 0.5s;
+}
+
+#back-button button:hover {
+    transform: rotateX(40deg);
+    transform: scale(1.04);
 }
 
 .box {
@@ -96,6 +104,11 @@ button{
     justify-content: space-between;
     flex-direction: column;
     align-items: center;
+    transition: 0.4s;
+}
+
+#profile:hover {
+    transform: scale(1.03);
 }
 
 .profile-content {
@@ -135,10 +148,6 @@ button{
     transition: 0.8s;
 }
 
-.svg-container:hover {
-   
-}
-
 .svg-container:hover svg path {
     fill: #9747FF;
 
@@ -149,9 +158,19 @@ button{
 }
 
 /* Occupation  */
+#occupation {
+    transition: 0.4s;
+}
+
+#occupation:hover {
+    transform: scale(1.03);
+}
+
 #occupation h2 {
     font-size: clamp(18px, 2.5vw, 18px);
     color: white;
+
+
 }
 
 #occupation h3 {
@@ -166,6 +185,11 @@ button{
     display: flex;
     justify-content: space-around;
     flex-direction: column;
+    transition: 0.4s;
+}
+
+#sociallinks:hover {
+    transform: scale(1.03);
 }
 
 .sociallink {
@@ -205,6 +229,14 @@ button{
 }
 
 /* quotes */
+#quotes {
+    transition: 0.4s;
+}
+
+#quotes:hover {
+    transform: scale(1.03);
+}
+
 #quotes h2 {
     font-size: clamp(18px, 2.5vw, 18px);
     color: white;
@@ -220,7 +252,11 @@ button{
 #experience {
     color: white;
     padding: 20px;
+    transition: 0.4s;
+}
 
+#experience:hover {
+    transform: scale(1.03);
 }
 
 #experience h2 {
@@ -364,7 +400,7 @@ button{
     position: absolute;
     right: 40px;
     top: 110%;
-   
+
 }
 
 /* github */
@@ -389,6 +425,7 @@ button{
 /* projects */
 #project {
     padding: 20px;
+    transition: 0.4s;
 }
 
 #project h2 {
@@ -400,7 +437,7 @@ button{
 #moreicon2 {
     left: 22%;
     top: 110%;
-   
+
     position: absolute;
 }
 
@@ -419,7 +456,7 @@ button{
     position: absolute;
     right: 40px;
     top: 55%;
-   
+
 }
 
 .achievements-content {
@@ -437,75 +474,84 @@ img {
 
 /* Responsive */
 
-/* Extra Small Devices (Portrait Phones, less than 576px) */
 @media screen and (max-width: 575.98px) {
-    html{
+    html {
         overflow-x: hidden;
     }
+
     #page-sections {
         display: flex;
         flex-direction: column;
     }
-    #profile{
+
+    #profile {
         order: 1;
         height: 55vh;
     }
-    #occupation{
+
+    #occupation {
         order: 2;
     }
-    #quotes{
+
+    #quotes {
         order: 3;
     }
-    #experience{
+
+    #experience {
         order: 4;
     }
-    #sociallinks{
+
+    #sociallinks {
         order: 5;
     }
-    #skills{
+
+    #skills {
         order: 6;
     }
-    #achievments{
+
+    #achievments {
         order: 7;
     }
-    #project{
+
+    #project {
         order: 8;
     }
-    #certifications{
+
+    #certifications {
         order: 9;
     }
-    #github{
+
+    #github {
         order: 10;
     }
+
     #moreicon3 {
         top: 240%;
     }
-    #moreicon2{
+
+    #moreicon2 {
         top: 295%;
         left: 90%;
     }
-    #moreicon{
+
+    #moreicon {
         top: 342%;
     }
-    .background-skill{
+
+    .background-skill {
         width: 280px;
     }
 }
 
-/* Small Devices (Landscape Phones, 576px and up) */
-@media only screen and (min-width: 576px) and (max-width: 767.98px) {}
+@media only screen and (min-width: 576px) and (max-width: 767.98px) {
+    #page-sections {
+        flex-direction: column;
+    }
 
-/* Medium Devices (Tablets, 768px and up) */
-@media only screen and (min-width: 768px) and (max-width: 991.98px) {}
-
-/* Large Devices (Desktops, 992px and up) */
-@media only screen and (min-width: 992px) and (max-width: 1199.98px) {}
-
-/* Extra Large Devices (Large Desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) and (max-width: 1399.98px) {}
-
-/* Super Large Devices (Ultra-Wide Screens, 1400px and up) */
-@media only screen and (min-width: 1400px) {}
+    .background-skill {
+        width: 300px;
+    }
+}
 
 
 /* scroll bar  */
@@ -522,5 +568,3 @@ img {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #7d37cc;
 }
-
-
