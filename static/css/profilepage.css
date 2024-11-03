@@ -8,6 +8,9 @@ html{
     scroll-behavior: smooth;
     
 }
+button{
+    cursor: none !important;
+}
 #page-container {
     width: 100%;
     height: 100vh;
@@ -134,7 +137,7 @@ html{
 }
 
 .svg-container:hover {
-    cursor: pointer;
+   
 }
 
 .svg-container:hover svg path {
@@ -362,7 +365,7 @@ html{
     position: absolute;
     right: 40px;
     top: 110%;
-    cursor: pointer;
+   
 }
 
 /* github */
@@ -398,7 +401,7 @@ html{
 #moreicon2 {
     left: 22%;
     top: 110%;
-    cursor: pointer;
+   
     position: absolute;
 }
 
@@ -417,7 +420,7 @@ html{
     position: absolute;
     right: 40px;
     top: 55%;
-    cursor: pointer;
+   
 }
 
 .achievements-content {
