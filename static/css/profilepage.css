@@ -231,6 +231,7 @@ button {
 /* quotes */
 #quotes {
     transition: 0.4s;
+    width: 310px;
 }
 
 #quotes:hover {
@@ -241,12 +242,25 @@ button {
     font-size: clamp(18px, 2.5vw, 18px);
     color: white;
 }
-
-#quotes h3 {
-    padding-top: 30px;
-    font-size: clamp(18px, 2.5vw, 25px);
+.marquee p {
+    display: inline-flex;
+    padding-left:40px ;
     color: white;
+    margin-top: 30px;
+    position: relative;
+font-size: clamp(18px, 2.5vw, 25px);
+    animation: marquee 8s linear infinite;
+    
 }
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
 
 /* experience */
 #experience {
@@ -262,7 +276,7 @@ button {
 #experience h2 {
     font-size: clamp(18px, 2.5vw, 24px);
     padding: 5px;
-    color: #9747FF;
+    color: #7ad100;
 
 }
 
@@ -315,6 +329,7 @@ button {
     overflow: hidden;
     white-space: nowrap;
     display: flex;
+    width: 100%; 
 }
 
 .marquee-content {
@@ -386,9 +401,10 @@ button {
 
 #certifications h2 {
     font-size: clamp(18px, 2.5vw, 18px);
-    color: white;
+    color: #7ad100;
     padding: 10px;
 }
+
 
 .certi-content h2 {
     padding: 10px;
@@ -495,6 +511,7 @@ img {
 
     #quotes {
         order: 3;
+        width: 402px;
     }
 
     #experience {
@@ -561,7 +578,8 @@ img {
 
 
 ::-webkit-scrollbar-thumb {
-    background-color: #9747FF;
+    background-color: #7d37cc;
+
     border-radius: 6px;
 }
 
