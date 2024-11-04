@@ -5,12 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-
+    
     <link rel="stylesheet" href="../static/dash/style.css">
     <link rel="stylesheet" href="../static/dash/custom.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 
-    <title>Dashboard Panel</title> 
+    <title>Edit Profile</title> 
+  <style>
+.update-button {
+    background-color: #7ad100; 
+    color: white;
+    padding: 10px 20px;
+    border: none; 
+    border-radius: 5px;
+    font-size: 16px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.update-button:hover {
+    background-color: #9747FF; 
+    transform: translateY(-2px); 
+}
+
+.update-button:focus {
+    outline: none; 
+    box-shadow: 0 0 0 2px rgba(121, 189, 249, 0.5); 
+}
+.action-icon{
+    margin-top: 20px;
+}
+  </style>
 </head>
 <body>
      
@@ -24,10 +51,11 @@
                     <span class="text">Profile</span>
                 </div>
                
-                <!-- Profile  -->
-                <div class="profile-box">
-               <a href="./profileedit.php"><i class="uil uil-edit edit-icon"></i></a>
+                <!-- Profile3  -->
+               
 
+                <div class="profile-box">
+                  
     <div class="profile-header">
         <img src="../static/img/profile.png" alt="Profile Picture" class="profile-pic">
         <h2 class="profile-name">John Doe</h2>
@@ -83,6 +111,10 @@
             <span>Engineering</span>
         </div>
     </div>
+  <div class="action-icon mt-3">
+  <a href="./index.php"><button class="update-button">Back</button></a>
+  <button class="update-button">Update</button>
+  </div>
 </div>
 
 
