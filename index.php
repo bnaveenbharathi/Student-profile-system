@@ -1,7 +1,12 @@
 <?php 
+session_start();
 
-
-header("Location: login.php");
-
+if (!isset($_SESSION['roll_no'])) {
+    header("Location: login.php"); 
+    exit();
+}
 
 ?>
+
+
+

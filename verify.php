@@ -2,6 +2,11 @@
 include("./resources/connection.php");
 session_start(); 
 
+if (isset($_SESSION['roll_no'])) {
+    header("Location: dashboard/");
+    exit();
+}
+
 $verificationMessage = ""; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

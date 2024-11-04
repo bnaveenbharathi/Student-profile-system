@@ -3,10 +3,6 @@ include("./resources/connection.php");
 
 session_start();
 
-if (!isset($_SESSION['roll_no'])) {
-    header("Location: verify.php"); 
-    exit();
-}
 
 $name = $_SESSION['name'];
 $department = $_SESSION['department'];
@@ -14,6 +10,11 @@ $branch = $_SESSION['branch'];
 $roll_no = $_SESSION['roll_no']; 
 
 $message = '';
+
+if (!isset($_SESSION['roll_no'])) {
+  header("Location: verify.php"); 
+  exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newPassword = $_POST['password'];
