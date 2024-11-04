@@ -50,7 +50,7 @@
     <section class="dashboard">
         <div class="top">
             <i class="uil uil-bars sidebar-toggle"></i>
-
-            
             <img src="images/profile.jpg" alt="">
         </div>
+
+        

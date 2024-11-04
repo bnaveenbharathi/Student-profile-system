@@ -1,15 +1,39 @@
+<?php 
+include("../resources/connection.php");
+session_start();
+
+if (!isset($_SESSION['roll_no'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$roll_no = $_SESSION['roll_no'];
+$email = $_SESSION['email'];
+
+$stmt = $conn->prepare("SELECT * FROM users WHERE roll_no = ?");
+$stmt->bind_param("s", $roll_no);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+} else {
+    echo "User not found.";
+    exit();
+}
+
+$stmt->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-
     <link rel="stylesheet" href="../static/dash/style.css">
     <link rel="stylesheet" href="../static/dash/custom.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-
     <title>Dashboard Panel</title> 
 </head>
 <body>
@@ -30,33 +54,33 @@
 
     <div class="profile-header">
         <img src="../static/img/profile.png" alt="Profile Picture" class="profile-pic">
-        <h2 class="profile-name">John Doe</h2>
+        <h2 class="profile-name"><?php echo htmlspecialchars($user["name"]); ?></h2>
     </div>
     
     <div class="profile-info">
         <div class="info-box">
             <strong>Name:</strong>
-            <span>John Doe</span>
+            <span><?php echo htmlspecialchars($user["name"]); ?></span>
         </div>
         <div class="info-box">
             <strong>Roll No:</strong>
-            <span>12345</span>
+            <span><?php echo htmlspecialchars($user["roll_no"]); ?></span>
         </div>
         <div class="info-box">
             <strong>Occupation:</strong>
-            <span>Web Developer</span>
+            <span><?php echo htmlspecialchars($user["occupation"]); ?></span>
         </div>
         <div class="info-box">
             <strong>Email:</strong>
-            <span>john.doe@example.com</span>
+            <span><?php echo htmlspecialchars($user["email"]);?></span>
         </div>
         <div class="info-box">
             <strong>GitHub:</strong>
-            <span><a href="https://github.com/johndoe" target="_blank">bnaveenbharathi</a></span>
+            <span><a href="<?php echo htmlspecialchars($user["github_link"]);?>" target="_blank">bnaveenbharathi</a></span>
         </div>
         <div class="info-box">
             <strong>LinkedIn:</strong>
-            <span><a href="https://linkedin.com/in/johndoe" target="_blank">bnaveenbharathi</a></span>
+            <span><a href="<?php echo htmlspecialchars($user["linkedin_link"]); ?>" target="_blank">bnaveenbharathi</a></span>
         </div>
         <div class="info-box">
             <strong>Experience:</strong>
@@ -64,15 +88,15 @@
         </div>
         <div class="info-box">
             <strong>Department:</strong>
-            <span>Computer Science</span>
+            <span><?php echo htmlspecialchars($user["department"]); ?></span>
         </div>
         <div class="info-box">
             <strong>Year:</strong>
-            <span>2024</span>
+            <span><?php echo htmlspecialchars($user["year"]); ?></span>
         </div>
         <div class="info-box">
             <strong>Semester:</strong>
-            <span>5</span>
+            <span><?php echo htmlspecialchars($user["semester"]); ?></span>
         </div>
         <div class="info-box">
             <strong>Skills:</strong>
@@ -80,7 +104,7 @@
         </div>
         <div class="info-box">
             <strong>Branch:</strong>
-            <span>Engineering</span>
+            <span><?php echo htmlspecialchars($user["branch"]); ?></span>
         </div>
     </div>
 </div>
