@@ -12,15 +12,15 @@
                     <i class="uil uil-estate"></i>
                     <span class="link-name">Home</span>
                 </a></li>
-                <li><a href="#">
+                <li><a href="./achievements.php">
                     <i class="uil uil-files-landscapes"></i>
                     <span class="link-name">Achievements</span>
                 </a></li>
-                <li><a href="#">
+                <li><a href="./projects.php">
                     <i class="uil uil-chart"></i>
                     <span class="link-name">Projects</span>
                 </a></li>
-                <li><a href="#">
+                <li><a href="./certification.php">
                     <i class="uil uil-thumbs-up"></i>
                     <span class="link-name">Certifications</span>
                 </a></li>
@@ -51,10 +51,6 @@
         <div class="top">
             <i class="uil uil-bars sidebar-toggle"></i>
 
-            <div class="search-box">
-                <i class="uil uil-search"></i>
-                <input type="text" placeholder="Search here...">
-            </div>
             
             <img src="images/profile.jpg" alt="">
         </div>
