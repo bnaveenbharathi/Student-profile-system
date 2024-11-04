@@ -3,36 +3,28 @@
             <div class="logo-image">
                 <img src="images/logo.png" alt="">
             </div>
-
-            <span class="logo_name">CodingLab</span>
+            <!-- <span class="logo_name">B.Naveen Bharathi</span> -->
         </div>
 
         <div class="menu-items">
             <ul class="nav-links">
                 <li><a href="#">
                     <i class="uil uil-estate"></i>
-                    <span class="link-name">Dahsboard</span>
+                    <span class="link-name">Home</span>
                 </a></li>
                 <li><a href="#">
                     <i class="uil uil-files-landscapes"></i>
-                    <span class="link-name">Content</span>
+                    <span class="link-name">Achievements</span>
                 </a></li>
                 <li><a href="#">
                     <i class="uil uil-chart"></i>
-                    <span class="link-name">Analytics</span>
+                    <span class="link-name">Projects</span>
                 </a></li>
                 <li><a href="#">
                     <i class="uil uil-thumbs-up"></i>
-                    <span class="link-name">Like</span>
+                    <span class="link-name">Certifications</span>
                 </a></li>
-                <li><a href="#">
-                    <i class="uil uil-comments"></i>
-                    <span class="link-name">Comment</span>
-                </a></li>
-                <li><a href="#">
-                    <i class="uil uil-share"></i>
-                    <span class="link-name">Share</span>
-                </a></li>
+               
             </ul>
             
             <ul class="logout-mode">
