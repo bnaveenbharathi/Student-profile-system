@@ -1,5 +1,6 @@
 <?php 
 include("./resources/connection.php");
+session_start(); 
 
 $verificationMessage = ""; 
 
@@ -11,10 +12,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST['email'];
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $verificationMessage = "Invalid email format."; 
+            header("Location: verify.php");
+            return;
         } else {
             try {
-                $sql = "SELECT * FROM users WHERE roll_no = ? AND email = ?";
+                $sql = "SELECT name, department, branch, roll_no FROM users WHERE roll_no = ? AND email = ?";
                 $stmt = $conn->prepare($sql);
 
                 if ($stmt === false) {
@@ -30,8 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
                 if ($result->num_rows > 0) {
-                    $verificationMessage = "Verified"; 
-                    header("Location: register.php"); 
+                    $user = $result->fetch_assoc();
+                    
+                    $_SESSION['name'] = $user['name'];
+                    $_SESSION['department'] = $user['department'];
+                    $_SESSION['branch'] = $user['branch'];
+                    $_SESSION['roll_no'] = $user['roll_no']; 
+
+                    header("Location: register.php");
                     exit();
                 } else {
                     $verificationMessage = "User not found"; 
@@ -46,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 <!doctype html>
 <html lang="en"> 
@@ -112,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             setTimeout(() => {
                 document.getElementById('verificationForm').submit();
-            }, 2500);
+            }, 2000);
         }
 
         const verificationMessage = "<?php echo $verificationMessage; ?>";

@@ -150,7 +150,7 @@ section .signin .content .form .inputBox i
   color: #0f0;
   font-weight: 600;
 }
-.signin .content .form .inputBox input[type="submit"]
+.signin .content .form .inputBox input[type="submit"],.signin .content .form .inputBox input[type="button"]
 {
   padding: 10px;
   background: #0f0;
@@ -160,7 +160,7 @@ section .signin .content .form .inputBox i
   letter-spacing: 0.05em;
   cursor: pointer;
 }
-input[type="submit"]:active
+input[type="submit"]:active,input[type="button"]:active
 {
   opacity: 0.6;
 }
