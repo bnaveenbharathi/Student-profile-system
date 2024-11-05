@@ -7,7 +7,6 @@ if (!isset($_SESSION['roll_no'])) {
     exit();
 }
 
-// Fetch user data from the database
 $roll_no = $_SESSION['roll_no'];
 $query = "SELECT * FROM users WHERE roll_no = ?";
 $stmt = $conn->prepare($query);
@@ -16,13 +15,11 @@ $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
-// Set the skills for display
-$skills = $user['skills']; // Assuming 'skills' is a column in the users table
+$skills = $user['skills'];
 $user['skills'] = $skills ? $skills : '';
 
-// Assuming 'skills' is stored as a JSON array, convert it to a comma-separated string for display
-$skills = json_decode($user['skills'], true); // Decode JSON into an array
-$user['skills'] = is_array($skills) ? implode(', ', $skills) : ''; // Convert to comma-separated string
+$skills = json_decode($user['skills'], true); 
+$user['skills'] = is_array($skills) ? implode(', ', $skills) : ''; 
 
 $message = '';if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
@@ -34,17 +31,14 @@ $message = '';if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $department = $_POST['department'];
     $year = $_POST['year'];
     $semester = $_POST['semester'];
-    $skills = $_POST['skills']; // This should be a comma-separated string
+    $skills = $_POST['skills']; 
     $branch = $_POST['branch'];
 
-    // Convert the comma-separated string of skills into a JSON array
-    $skillArray = array_map('trim', explode(',', $skills)); // Split and trim spaces
-    $skillsJson = json_encode($skillArray); // Convert to JSON
-
+    $skillArray = array_map('trim', explode(',', $skills)); 
+    $skillsJson = json_encode($skillArray); 
     if (empty($name) || empty($email)) {
         $message = "Name and email are required.";
     } else {
-        // Update user data in the database
         $updateQuery = "UPDATE users SET 
             name = ?, 
             email = ?, 
@@ -56,7 +50,7 @@ $message = '';if ($_SERVER["REQUEST_METHOD"] == "POST") {
             year = ?, 
             semester = ?, 
             branch = ?, 
-            skills = ?  -- Update skills in JSON format
+            skills = ? 
             WHERE roll_no = ?";
 
         $updateStmt = $conn->prepare($updateQuery);
@@ -71,14 +65,13 @@ $message = '';if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $year, 
             $semester, 
             $branch, 
-            $skillsJson, // Store the JSON skills here
+            $skillsJson, 
             $roll_no);
 
         if ($updateStmt->execute()) {
             $message = "Profile updated successfully!";
     header("Location: ./index.php");
             
-            // Refresh user data
             $user = array_merge($user, [
                 'name' => $name,
                 'email' => $email,
@@ -90,7 +83,7 @@ $message = '';if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'year' => $year,
                 'semester' => $semester,
                 'branch' => $branch,
-                'skills' => $skillsJson // Update skills in JSON format
+                'skills' => $skillsJson
             ]);
         } else {
             $message = "Error updating profile.";
@@ -147,7 +140,7 @@ $message = '';if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: none;
             background: transparent;
             color: #7ad100;
-           
+           border-radius: 5px ;
             border: 1px solid #9747FF;
             padding: 15px;
             margin-top: 10px;

@@ -17,13 +17,28 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
+
+    if (isset($user['skills']) && !empty($user['skills'])) {
+        $skills = json_decode($user['skills'], true); 
+        
+        if (is_array($skills)) {
+            $user['skills'] = implode(', ', $skills);
+        } else {
+            $user['skills'] = $user['skills'];
+        }
+    } else {
+        $user['skills'] = ''; 
+    }
+
 } else {
     echo "User not found.";
     exit();
 }
 
 $stmt->close();
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -84,7 +99,7 @@ $stmt->close();
         </div>
         <div class="info-box">
             <strong>Experience:</strong>
-            <span>3 Years</span>
+            <span><?php echo htmlspecialchars($user["experience"]); ?> Years</span>
         </div>
         <div class="info-box">
             <strong>Department:</strong>
@@ -100,7 +115,7 @@ $stmt->close();
         </div>
         <div class="info-box">
             <strong>Skills:</strong>
-            <span>HTML, CSS, JavaScript, React, Node.js</span>
+            <span><?php echo htmlspecialchars($user["skills"]); ?></span>
         </div>
         <div class="info-box">
             <strong>Branch:</strong>
