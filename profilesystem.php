@@ -1,3 +1,44 @@
+<?php 
+include("./resources/connection.php");
+session_start();
+
+if (!isset($_SESSION['roll_no'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$roll_no = $_SESSION['roll_no'];
+$email = $_SESSION['email'];
+
+$stmt = $conn->prepare("SELECT * FROM users WHERE roll_no = ?");
+$stmt->bind_param("s", $roll_no);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    $githubUsername = basename(parse_url($user["github_link"], PHP_URL_PATH));
+    if (isset($user['skills']) && !empty($user['skills'])) {
+        $skills = json_decode($user['skills'], true); 
+        
+        if (is_array($skills)) {
+            $user['skills'] = implode(', ', $skills);
+        } else {
+            $user['skills'] = $user['skills'];
+        }
+    } else {
+        $user['skills'] = ''; 
+    }
+
+} else {
+    echo "User not found.";
+    exit();
+}
+
+$stmt->close();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +81,7 @@
     <div class="" id="page-container" style="display: none;">
         <!-- top bar -->
         <div class="top-bar" data-aos="fade-down">
-            <h2>B.Naveen Bharathi</h2>
+            <h2><?php echo htmlspecialchars($user["name"]); ?></h2>
             <a href="" id="back-button"><button>
                     <i class="arrow">↗</i>
                 </button>
@@ -55,7 +96,7 @@
                     <div id="Profileimg" class="d-flex justify-content-center">
                         <img src="./static/img/profile.png" alt="" width="150px" style="object-fit: cover;">
                     </div>
-                    <button class="font1">B.Naveen Bharathi</button>
+                    <button class="font1"><?php echo htmlspecialchars($user["name"]); ?></button>
                     <div>
                         <p class="font1">Biography</p>
                         <span class="svg-container">
@@ -76,14 +117,14 @@
             <div id="occupation" class="box" data-aos="zoom-out" data-aos-duration="1000">
 
                 <h2 class="font1"  style="color: #7ad100;">Occupation</h2>
-                <h3 class="font2 mt-2">Full Stack Developer</h3>
+                <h3 class="font2 mt-2"><?php echo htmlspecialchars($user["occupation"]); ?></h3>
 
             </div>
             <div class="box" id="sociallinks" data-aos="zoom-out">
                 <h2 class="font1"  style="color: #7ad100;">Social Links</h2>
                 <div class="sociallink">
-                    <a href=""><button id="socialicon"><i class="fa-brands fa-linkedin"></i></button></a>
-                    <a href=""><button id="socialicon"><i class="fa-brands fa-github"></i></button></a>
+                    <a href="<?php echo htmlspecialchars($user["linkedin_link"]); ?>"><button id="socialicon"><i class="fa-brands fa-linkedin"></i></button></a>
+                    <a href="<?php echo htmlspecialchars($user["github_link"]); ?>"><button id="socialicon"><i class="fa-brands fa-github"></i></button></a>
                 </div>
             </div>
             <div id="quotes" class="box" data-aos="zoom-out" >
@@ -264,7 +305,7 @@
             </div>
             <div class="box" id="github">
                 <h2 class="font1" style="color: #7ad100;">Github </h2>
-                <iframe src="https://streak-stats.demolab.com/?user=bnaveenbharathi&theme=dark" frameborder=""
+                <iframe src="https://streak-stats.demolab.com/?user=<?php echo htmlspecialchars($githubUsername); ?>&theme=dark" frameborder=""
                     id="githubmain"></iframe>
             </div>
             <div class="box" id="certifications">
