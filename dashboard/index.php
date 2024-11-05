@@ -60,7 +60,7 @@ $stmt->close();
                 <div class="title">
                 <i class="uil uil-user"></i>
 
-                    <span class="text">Profile</span>
+                    <span class="text">Profile</span> 
                 </div>
                
                 <!-- Profile  -->

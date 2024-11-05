@@ -51,6 +51,14 @@
         <div class="top">
             <i class="uil uil-bars sidebar-toggle"></i>
             <img src="images/profile.jpg" alt="">
+            <button style="background:transparent;border:none;font-size:38px;" class="viewbtn"><i class="uil uil-eye" ></i></button>
         </div>
-
+<style>
+    body.dark .viewbtn{
+    color: white;
+}
+.viewbtn{
+    color: black;
+}
+</style>
         
