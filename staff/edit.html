@@ -65,14 +65,49 @@
     <div class="container">
         <h2>Student Profile Management System</h2>
         <form action="/submit-profile" method="POST">
-            <label for="student-id">Student ID</label>
-            <input type="text" id="student-id" name="student_id" required>
+            <label for="Register_Number">Register Number</label>
+            <input type="text" id="Register_Number" name="Register_Number" required>
 
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" required><br>
 
-            <label for="dob">Date of Birth</label>
-            <input type="date" id="dob" name="dob" required>
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+              <div>  
+                <label for="department">Department</label>
+                    <select id="department" name="department" required>
+                        <option value="AI&DS">Artificial Intelligence and Data Science</option>
+                        <option value="IT">Information Technology</option>
+                        <option value="CSE">Computer Science</option>
+                        <option value="EEE">Electrical and Electronics Engineering</option>
+                        <option value="ECE">Electronics and Communication Engineering</option>
+                        <option value="MECH">Mechanical Engineering</option>
+                        <option value="CIVIL">Civil Engineering</option>
+                <!-- Add more options as needed -->
+                    </select>
+              </div>
+
+              <div>
+
+                <label for="year">Year of Study</label>
+                <select id="year" name="year" required>
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                </select>
+              </div>
+            </div><br>
+            
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+                <div>
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+                <div>
+                    <label for="Age">Age</label>
+                    <input type="number" id="Age" name="Age">
+                </div>
+            </div>
 
             <label for="sex">Sex</label>
             <select id="sex" name="sex" required>
@@ -108,8 +143,39 @@
             <label for="mother-tongue">Mother Tongue</label>
             <input type="text" id="mother-tongue" name="mother_tongue">
 
-            <label for="reference-persons">Reference Persons</label>
-            <textarea id="reference-persons" name="reference_persons" rows="3" placeholder="Enter names and contact information"></textarea>
+            <label for="reference-persons">Reference Persons</label><br>
+            <table>
+                <thead>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Phone No</th>
+                    <th>Address</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td><input type="text" name="name_1" placeholder="Enter name"></td>
+                    <td><input type="text" name="phone_1" placeholder="Enter phone no"></td>
+                    <td><textarea name="address_1" rows="2" placeholder="Enter address"></textarea></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td><input type="text" name="name_1" placeholder="Enter name"></td>
+                    <td><input type="text" name="phone_1" placeholder="Enter phone no"></td>
+                    <td><textarea name="address_1" rows="2" placeholder="Enter address"></textarea></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td><input type="text" name="name_1" placeholder="Enter name"></td>
+                    <td><input type="text" name="phone_1" placeholder="Enter phone no"></td>
+                    <td><textarea name="address_1" rows="2" placeholder="Enter address"></textarea></td>
+                  </tr>
+                  <!-- Add more rows as needed -->
+                </tbody>
+              </table>
+              
 
             <label for="personal-identifications">Personal Identifications</label>
             <textarea id="personal-identifications" name="personal_identifications" rows="3" placeholder="Enter unique identification marks or features"></textarea>
@@ -120,25 +186,139 @@
             <label for="phone">Phone</label>
             <input type="text" id="phone" name="phone" required>
 
-            <label for="department">Department</label>
-            <select id="department" name="department" required>
-                <option value="cse">Computer Science</option>
-                <option value="eee">Electrical Engineering</option>
-                <option value="mech">Mechanical Engineering</option>
-                <option value="civil">Civil Engineering</option>
-                <!-- Add more options as needed -->
-            </select>
+            
 
-            <label for="year">Year of Study</label>
-            <select id="year" name="year" required>
-                <option value="1">1st Year</option>
-                <option value="2">2nd Year</option>
-                <option value="3">3rd Year</option>
-                <option value="4">4th Year</option>
-            </select>
 
-            <label for="cgpa">CGPA</label>
-            <input type="number" id="cgpa" name="cgpa" step="0.01" min="0" max="10" required>
+            <label for="gpa">GPA</label><br>
+
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+                <div>
+                    <label for="gpa">sem 1</label><br>
+                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+            
+                </div>
+
+                <div>
+                    <label for="gpa">sem 2</label><br>
+                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                </div>
+            </div><br>
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+                <div>
+                    <label for="gpa">sem 3</label><br>
+                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                </div>
+                <div>
+                    <label for="gpa">sem 4</label><br>
+                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                </div>
+            </div><br>
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+                <div>
+                    <label for="gpa">sem 5</label><br>
+                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                </div>
+                <div>
+                    <label for="gpa">sem 6</label><br>
+                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                </div>
+            </div><br>
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+                <div>
+                    <label for="gpa">sem 7</label><br>
+                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                </div>
+                <div>
+                    <label for="gpa">sem 8 </label><br>
+                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                </div>
+            </div><br><br>
+            <label for="CGPA">CGPA</label><br>
+            <input type="number" id="CGPA" name="CGPA" step="0.01" min="0" max="10" required> <br>
+
+            <label for="family-photo">Student Photo:</label><br>
+            <input type="file" id="student-photo" name="student-photo" accept="image/*"><br>
+
+            <label for="family-photo">Family Photo:</label><br>
+            <input type="file" id="family-photo" name="family_photo" accept="image/*"><br>
+
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+                <div>
+                  <label for="Father-name">Father Name:</label>
+                  <input type="text" id="Father-name" name="Father_name" placeholder="Enter Father name">
+                </div>
+                
+                <div>
+                    <label for="Age">Age</label>
+                    <input type="number" id="Age" name="Age" placeholder="Enter Age">
+                </div>
+
+                <div>
+                  <label for="Father-occupation">Father Occupation:</label>
+                  <input type="text" id="Father-occupation" name="Father_occupation" placeholder="Enter occupation">
+                </div>
+
+                <div>
+                    <label for="Mobile number">Mobile number:</label>
+                    <input type="text" id="Mobile number" name="Mobile number" placeholder="Enter Mobile number">
+                </div>
+            </div><br>
+
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+                <div>
+                  <label for="mother-name">Mother Name:</label>
+                  <input type="text" id="Mother-name" name="Mother_name" placeholder="Enter Mother name">
+                </div>
+                <div>
+                    <label for="Age">Age</label>
+                    <input type="number" id="Age" name="Age" placeholder="Enter Age">
+                </div>
+                
+                <div>
+                  <label for="Mother-occupation">Mother Occupation:</label>
+                  <input type="text" id="Mother-occupation" name="Mother_occupation" placeholder="Enter occupation">
+                </div>
+
+                <div>
+                    <label for="Mobile number">Mobile number:</label>
+                    <input type="text" id="Mobile number" name="Mobile number" placeholder="Enter Mobile number">
+                </div>
+            </div><br>
+
+
+            <div style="margin-bottom: 10px;">
+                  <label for="Student Disciplinary Issues">Student Disciplinary Issues</label><br>
+
+                  <label for="issue-date">Issue date</label>
+                  <input type="date" id="issue-date" name="issue_date">
+            </div>
+              
+            <div style="margin-bottom: 10px;">
+                  <label for="issue-description">Issue Description:</label><br>
+                  <textarea id="issue-description" name="issue_description" rows="3" placeholder="Describe the issue"></textarea>
+            </div>
+              
+            <div style="margin-bottom: 10px;">
+                  <label for="action-taken">Action Taken:</label><br>
+                  <textarea id="action-taken" name="action_taken" rows="2" placeholder="Describe action taken"></textarea>
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label for="Staff Handle">Staff Handle</label><br>
+                <textarea id="Staff Handle" name="Staff Handle" rows="2" placeholder="Enter staff name"></textarea>
+            </div>
+          
+              
+            <div style="margin-bottom: 10px;">
+                  <label for="comments">Additional Comments:</label><br>
+                  <textarea id="comments" name="comments" rows="2" placeholder="Any additional comments"></textarea>
+            </div><br>
+
+                <label for="Document upload">Document upload</label><br>
+                <input type="file" id="Document upload" name="Document upload" accept="image/*"><br>
+        
+          
+           
 
             <button type="submit" class="submit-btn">Submit Profile</button>
         </form>
