@@ -10,7 +10,7 @@ if (!isset($_SESSION['roll_no'])) {
 $roll_no = $_SESSION['roll_no'];
 $email = $_SESSION['email'];
 
-$stmt = $conn->prepare("SELECT * FROM users WHERE roll_no = ?");
+$stmt = $conn->prepare("SELECT * FROM students WHERE roll_no = ?");
 $stmt->bind_param("s", $roll_no);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -65,7 +65,6 @@ $stmt->close();
                
                 <!-- Profile  -->
                 <div class="profile-box">
-               <a href="./profileedit.php"><i class="uil uil-edit edit-icon"></i></a>
 
     <div class="profile-header">
         <img src="../static/img/profile.png" alt="Profile Picture" class="profile-pic">
@@ -81,10 +80,7 @@ $stmt->close();
             <strong>Roll No:</strong>
             <span><?php echo htmlspecialchars($user["roll_no"]); ?></span>
         </div>
-        <div class="info-box">
-            <strong>Occupation:</strong>
-            <span><?php echo htmlspecialchars($user["occupation"]); ?></span>
-        </div>
+       
         <div class="info-box">
             <strong>Email:</strong>
             <span><?php echo htmlspecialchars($user["email"]);?></span>
@@ -97,10 +93,7 @@ $stmt->close();
             <strong>LinkedIn:</strong>
             <span><a href="<?php echo htmlspecialchars($user["linkedin_link"]); ?>" target="_blank">bnaveenbharathi</a></span>
         </div>
-        <div class="info-box">
-            <strong>Experience:</strong>
-            <span><?php echo htmlspecialchars($user["experience"]); ?> Years</span>
-        </div>
+      
         <div class="info-box">
             <strong>Department:</strong>
             <span><?php echo htmlspecialchars($user["department"]); ?></span>

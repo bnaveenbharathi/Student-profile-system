@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newPassword = $_POST['password'];
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    $stmt = $conn->prepare("UPDATE users SET password = ? WHERE roll_no = ?");
+    $stmt = $conn->prepare("UPDATE students SET password = ? WHERE roll_no = ?");
     $stmt->bind_param("ss", $hashedPassword, $roll_no);
 
     if ($stmt->execute()) {

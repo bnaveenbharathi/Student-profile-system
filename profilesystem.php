@@ -10,7 +10,7 @@ if (!isset($_SESSION['roll_no'])) {
 $roll_no = $_SESSION['roll_no'];
 $email = $_SESSION['email'];
 
-$stmt = $conn->prepare("SELECT * FROM users WHERE roll_no = ?");
+$stmt = $conn->prepare("SELECT * FROM students WHERE roll_no = ?");
 $stmt->bind_param("s", $roll_no);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -117,7 +117,7 @@ $stmt->close();
             <div id="occupation" class="box" data-aos="zoom-out" data-aos-duration="1000">
 
                 <h2 class="font1"  style="color: #7ad100;">Occupation</h2>
-                <h3 class="font2 mt-2"><?php echo htmlspecialchars($user["occupation"]); ?></h3>
+                <!-- <h3 class="font2 mt-2"><?php echo htmlspecialchars($user["occupation"]); ?></h3> -->
 
             </div>
             <div class="box" id="sociallinks" data-aos="zoom-out">
