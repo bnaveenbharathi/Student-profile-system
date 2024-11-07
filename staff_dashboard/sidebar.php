@@ -1,7 +1,7 @@
 <nav>
         <div class="logo-name">
             <div class="logo-image">
-                <img src="images/logo.png" alt="">
+                <!-- <img src="images/logo.png" alt=""> -->
             </div>
             <!-- <span class="logo_name">B.Naveen Bharathi</span> -->
         </div>
@@ -50,7 +50,7 @@
     <section class="dashboard">
         <div class="top">
             <i class="uil uil-bars sidebar-toggle"></i>
-            <img src="images/profile.jpg" alt="">
+            <!-- <img src="images/profile.jpg" alt=""> -->
             <!-- <a href="../profilesystem.php" target="_blank"><button style="background:transparent;border:none;font-size:38px;" class="viewbtn"><i class="uil uil-eye" ></i></button> -->
             </a>
         </div>

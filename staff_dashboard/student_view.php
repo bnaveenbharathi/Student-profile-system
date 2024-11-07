@@ -1,3 +1,45 @@
+<?php
+
+session_start();
+
+include("../resources/connection.php");
+
+if (!isset($_SESSION['staff_id'])) {
+    header("Location: ../staff_login.php");
+    exit();
+}
+
+$roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : null;
+
+if (!$roll_no) {
+    echo "Student Roll No. not specified!";
+    exit();
+}
+
+$student_query = "SELECT * FROM students WHERE roll_no = ?";
+$stmt = $conn->prepare($student_query);
+
+if (!$stmt) {
+    die("Error preparing statement: " . $conn->error);
+}
+
+$stmt->bind_param("s", $roll_no);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "No student found with Roll No.: " . htmlspecialchars($roll_no);
+    exit();
+}
+
+$student = $result->fetch_assoc();
+$stmt->close();
+?>
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -207,37 +249,27 @@ input[type="file"]::file-selector-button:hover {
 
                 <form action="" method="POST">
                     <label for="Register_Number">Register Number</label>
-                    <input type="text" id="Register_Number" name="Register_Number" required readonly>
+                    <input type="text" id="Register_Number" name="Register_Number"  readonly value="<?php echo htmlspecialchars($student["roll_no"]); ?>">
 
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required readonly><br>
+                    <input type="text" id="name" name="name"  readonly value="<?php echo htmlspecialchars($student["name"]); ?>"><br>
 
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                         <div>
                             <label for="department">Department</label>
-                            <select id="department" name="department" required readonly>
-                                <option value="AI&DS" readonly>Artificial Intelligence and Data Science</option>
-                                <option value="IT" readonly>Information Technology</option>
-                                <option value="CSE" readonly>Computer Science</option>
-                                <option value="EEE" readonly>Electrical and Electronics Engineering</option>
-                                <option value="ECE" readonly>Electronics and Communication Engineering</option>
-                                <option value="MECH" readonly>Mechanical Engineering</option>
-                                <option value="CIVIL" readonly>Civil Engineering</option>
-                                <!-- Add more options as needed -->
-                            </select>
+                    <input type="text" id="department" name="department"  readonly value="<?php echo htmlspecialchars($student["department"]); ?>"><br>
+                          
                         </div>
-
                         <div>
-
                             <label for="year">Year of Study</label>
-                            <input type="text" id="year" name="year" readonly>
+                            <input type="text" id="year" name="year" readonly value="<?php echo htmlspecialchars($student["year"]); ?>">
                         </div>
                     </div><br>
 
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                         <div>
                             <label for="dob">Date of Birth</label>
-                            <input type="date" id="dob" name="dob" required readonly>
+                            <input type="date" id="dob" name="dob"  readonly>
                         </div>
                         <div>
                             <label for="Age">Age</label>
@@ -252,7 +284,7 @@ input[type="file"]::file-selector-button:hover {
                     <input type="text" id="community" name="community" readonly>
 
                     <label for="place-of-birth">Place of Birth</label>
-                    <input type="text" id="place-of-birth" name="place_of_birth" required readonly>
+                    <input type="text" id="place-of-birth" name="place_of_birth"  readonly>
 
                     <label for="blood-group">Blood Group</label>
                     <input type="text" id="blood-group" name="blood-group" readonly>
@@ -305,10 +337,10 @@ input[type="file"]::file-selector-button:hover {
                     <textarea id="personal-identifications" name="personal_identifications" rows="3" placeholder="Enter unique identification marks or features" readonly></textarea>
 
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required readonly>
+                    <input type="email" id="email" name="email"  readonly>
 
                     <label for="phone">Phone</label>
-                    <input type="text" id="phone" name="phone" required readonly>
+                    <input type="text" id="phone" name="phone"  readonly>
 
 
                     <label for="gpa">GPA</label><br>
@@ -316,47 +348,47 @@ input[type="file"]::file-selector-button:hover {
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                         <div>
                             <label for="gpa">sem 1</label><br>
-                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required readonly> <br>
+                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10"  readonly> <br>
 
                         </div>
 
                         <div>
                             <label for="gpa">sem 2</label><br>
-                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required readonly> <br>
+                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10"  readonly> <br>
                         </div>
                     </div><br>
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                         <div>
                             <label for="gpa">sem 3</label><br>
-                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required readonly> <br>
+                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10"  readonly> <br>
                         </div>
                         <div>
                             <label for="gpa">sem 4</label><br>
-                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required readonly> <br>
+                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10"  readonly> <br>
                         </div>
                     </div><br>
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                         <div>
                             <label for="gpa">sem 5</label><br>
-                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required readonly> <br>
+                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10"  readonly> <br>
                         </div>
                         <div>
                             <label for="gpa">sem 6</label><br>
-                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required readonly> <br>
+                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10"  readonly> <br>
                         </div>
                     </div><br>
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                         <div>
                             <label for="gpa">sem 7</label><br>
-                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required readonly> <br>
+                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10"  readonly> <br>
                         </div>
                         <div>
                             <label for="gpa">sem 8 </label><br>
-                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required readonly> <br>
+                            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10"  readonly> <br>
                         </div>
                     </div><br><br>
                     <label for="CGPA">CGPA</label><br>
-                    <input type="number" id="CGPA" name="CGPA" step="0.01" min="0" max="10" required readonly> <br>
+                    <input type="number" id="CGPA" name="CGPA" step="0.01" min="0" max="10"  readonly> <br>
 
                    
               <!-- student photo -->
@@ -472,6 +504,8 @@ input[type="file"]::file-selector-button:hover {
 
 
 
+            </div>
+            </div>
             </div>
 
 
