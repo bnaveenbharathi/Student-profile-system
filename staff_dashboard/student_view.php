@@ -494,7 +494,6 @@ input[type="file"]::file-selector-button:hover {
 
                     <div class="disciplinary-proof">
 
-                            <img src="" alt="" class="disciplinary-proof-image">
 
                     </div>
 
