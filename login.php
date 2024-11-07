@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($roll_no) || empty($email) || empty($password)) {
         $message = "All fields are required.";
     } else {
-        $stmt = $conn->prepare("SELECT password FROM users WHERE roll_no = ? AND email = ?");
+        $stmt = $conn->prepare("SELECT password FROM students WHERE roll_no = ? AND email = ?");
         $stmt->bind_param("ss", $roll_no, $email);
         $stmt->execute();
         $result = $stmt->get_result();
