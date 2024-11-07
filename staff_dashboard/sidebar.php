@@ -12,7 +12,7 @@
                     <i class="uil uil-estate"></i>
                     <span class="link-name">Home</span>
                 </a></li>
-                <li><a href="./student_view.php">
+                <li><a href="./student_list.php">
                     <i class="uil uil-files-landscapes"></i>
                     <span class="link-name">Students</span>
                 </a></li>
