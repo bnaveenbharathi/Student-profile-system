@@ -33,7 +33,7 @@ $student = $result->fetch_assoc();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $formName = $_POST['form_name']; 
     $roll_no = $_POST['roll_no'];
-
+    // Check if the form is 'basic_details' and update the basic details
     if ($formName == 'basic_details') {
         $name = $_POST['name'];
         $roll_no = $_POST['roll_no'];
@@ -95,94 +95,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($stmt->execute()) {
             echo "Basic details updated successfully.";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
         } else {
             echo "Error updating basic details: " . $conn->error;
         }
     }
 
     elseif ($formName == 'reference_persons') {
-            $reference_name = $_POST["reference_name"];
-            $reference_phone = $_POST["reference_phone"];
-            $reference_address = $_POST["reference_text"];
-            $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : null;
-            
-            $sqlInsertReferencePersons = "
-            INSERT INTO reference_persons (student_roll_no, name, phone_no, address) 
-            VALUES (?, ?, ?, ?)";
-    
-            $stmt = $conn->prepare($sqlInsertReferencePersons);
-            $stmt->bind_param(
-                'ssss',
-                $roll_no,
-                $reference_name,
-                $reference_phone,
-                $reference_address
-            );
-    
-            if ($stmt->execute()) {
-                echo "Reference person  details inserted successfully.<br>";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
-            } else {
-                echo "Error inserting reference person details: " . $conn->error . "<br>";
-            }
-        
-    }
+        $name = $_POST["name_$i"];
+        $phone = $_POST["phone_$i"];
+        $address = $_POST["address_$i"];
 
-    elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_name']) && $_POST['form_name'] == 'reference_persons_update') {
-        $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : null;
+        $sqlUpdateReferencePersons = "
+        UPDATE students SET 
+            father_name = ?, 
+            father_occupation = ?, 
+            father_phone = ?, 
+            mother_name = ?, 
+            mother_occupation = ?, 
+            mother_phone = ? 
+        WHERE roll_no = ?";
 
-    // Check for delete actions
-    $i = 1;
-    while (isset($_POST["delete_{$i}"])) {
-        $reference_person_id = $_POST["delete_{$i}"];
-        
-        // Delete the reference person record
-        $delete_query = "DELETE FROM reference_persons WHERE id = ? AND student_roll_no = ?";
-        $stmt = $conn->prepare($delete_query);
-        $stmt->bind_param('is', $reference_person_id, $roll_no);
+        $stmt = $conn->prepare($sqlUpdateReferencePersons);
+        $stmt->bind_param(
+            'sssssss',
+            $fatherName,
+            $fatherOccupation,
+            $fatherMobile,
+            $motherName,
+            $motherOccupation,
+            $motherMobile,
+            $roll_no
+        );
+
         if ($stmt->execute()) {
-            echo "Reference person {$i} deleted successfully.<br>";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
+            echo "Reference person details updated successfully.";
         } else {
-            echo "Error deleting reference person {$i}: " . $conn->error . "<br>";
+            echo "Error updating reference person details: " . $conn->error;
         }
-        $i++;
     }
-
-    // Check for update actions
-    $i = 1;
-    while (isset($_POST["update_{$i}"])) {
-        $reference_person_id = $_POST["update_{$i}"];
-        $reference_name = $_POST["reference_name_{$i}"];
-        $reference_phone = $_POST["reference_phone_{$i}"];
-        $reference_address = $_POST["reference_text_{$i}"];
-
-        // Ensure the fields are not empty
-        if (!empty($reference_name) && !empty($reference_phone) && !empty($reference_address)) {
-            // Prepare the update query
-            $sqlUpdateReferencePersons = "
-                UPDATE reference_persons 
-                SET name = ?, phone_no = ?, address = ? 
-                WHERE id = ? AND student_roll_no = ?";
-
-            $stmt = $conn->prepare($sqlUpdateReferencePersons);
-            $stmt->bind_param('sssis', $reference_name, $reference_phone, $reference_address, $reference_person_id, $roll_no);
-
-            // Execute the query
-            if ($stmt->execute()) {
-                echo "Reference person {$i} updated successfully.<br>";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
-
-            } else {
-                echo "Error updating reference person {$i}: " . $conn->error . "<br>";
-            }
-        } else {
-            echo "Please fill all fields for reference person {$i}.<br>";
-        }
-        $i++;
-    }
-}
 
     elseif ($formName == 'profile_photos') {
         // File uploads for profile photos, family photos, and documents
@@ -257,15 +207,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Student Edit | <?php echo htmlspecialchars($student["name"]); ?></title>
-    <style>
-        .action_btn{
-            padding: 6px;
-            color: white;
-            background: #007bff;
-            border: none;
-            border-radius: 5px;
-        }
-    </style>
 
 </head>
 
@@ -386,58 +327,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </form>
 
-<!-- REFERENCE PERSON UPDATE -->
-<form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data" name="reference_persons_update">
-    <input type="hidden" name="form_name" value="reference_persons_update">
-    
-    <label for="reference-persons">Reference Persons</label><br>
-    <table>
-        <thead>
-            <tr>
-                <th>S.No</th>
-                <th>Name</th>
-                <th>Phone No</th>
-                <th>Address</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            // Fetching reference persons from the database
-            $reference_persons_query = "SELECT * FROM reference_persons WHERE student_roll_no = ?";
-            $stmt = $conn->prepare($reference_persons_query);
-            $stmt->bind_param('s', $roll_no);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            $i = 1;
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>{$i}</td>
-                        <td><input type='text' name='reference_name_{$i}' value='" . htmlspecialchars($row['name']) . "' placeholder='Enter name'></td>
-                        <td><input type='text' name='reference_phone_{$i}' value='" . htmlspecialchars($row['phone_no']) . "' placeholder='Enter phone no'></td>
-                        <td><textarea name='reference_text_{$i}' rows='2' placeholder='Enter address'>" . htmlspecialchars($row['address']) . "</textarea></td>
-                        <td>
-                            <button type='submit' class='action_btn' name='update_{$i}' value='{$row['id']}'>Update</button>
-                            <button type='submit' class='action_btn' name='delete_{$i}' value='{$row['id']}'>Delete</button>
-                        </td>
-                    </tr>";
-                $i++;
-            }
-            ?>
-        </tbody>
-    </table>
 
-</form>
-
-
-
-<!-- REFERENCE PERSONINSERT -->
 <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  name="reference_persons">
 
 <input type="hidden" name="form_name" value="reference_persons">
 
-                    <label for="reference-persons">Reference Persons Insert</label><br>
+                    <label for="reference-persons">Reference Persons</label><br>
                     <table>
                         <thead>
                             <tr>
@@ -452,19 +347,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <td>1</td>
                                 <td><input type="text" name="reference_name" placeholder="Enter name"></td>
                                 <td><input type="text" name="reference_phone" placeholder="Enter phone no"></td>
-                                <td><textarea name="reference_text" rows="2" placeholder="Enter address" ></textarea></td>
+                                <td><textarea name="address_1" rows="2" placeholder="Enter address" name='reference_text'></textarea></td>
                             </tr>
                         </tbody>
                     </table>
 
 
- <button type="submit" class="submit-btn">INSERT</button>
+ <button type="submit" class="submit-btn">Update</button>
 
 </form>
-
-<!-- REFERENCE PERSON INSERT  END-->
-
-<!-- CGPA INSERT UPDATE DELETE -->
+           
 <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  name="cgpa_section">
                     <label for="gpa">GPA</label><br>
 
@@ -516,11 +408,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="submit" class="submit-btn">Update</button>
 
 </form>
-
-
-
-
-<!--  -->
 <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  name="photo_person">
 
                     <label for="family-photo">Student Photo:</label><br>

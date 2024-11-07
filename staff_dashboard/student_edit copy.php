@@ -31,212 +31,222 @@ if ($result->num_rows === 0) {
 $student = $result->fetch_assoc();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $formName = $_POST['form_name']; 
-    $roll_no = $_POST['roll_no'];
+    $registerNumber = $_POST['Register_Number'];
+    $name = $_POST['name'];
+    $department = $_POST['department'];
+    $year = $_POST['year'];
+    $dob = $_POST['dob'];
+    $age = $_POST['Age'];
+    $sex = $_POST['sex'];
+    $community = $_POST['community'];
+    $placeOfBirth = $_POST['place_of_birth'];
+    $bloodGroup = $_POST['blood_group'];
+    $caste = $_POST['caste'];
+    $religion = $_POST['religion'];
+    $motherTongue = $_POST['mother_tongue'];
+    $personalIdentifications = $_POST['personal_identifications'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $cgpa = $_POST['total_CGPA'];
+    $cgpaSemesters = [
+        $_POST['cgpa_sem1'],
+        $_POST['cgpa_sem2'],
+        $_POST['cgpa_sem3'],
+        $_POST['cgpa_sem4'],
+        $_POST['cgpa_sem5'],
+        $_POST['cgpa_sem6'],
+        $_POST['cgpa_sem7'],
+        $_POST['cgpa_sem8']
+    ];
 
-    if ($formName == 'basic_details') {
-        $name = $_POST['name'];
-        $roll_no = $_POST['roll_no'];
-        $department = $_POST['department'];
-        $year = $_POST['year'];
-        $dob = $_POST['dob'];
-        $age = $_POST['Age'];
-        $sex = $_POST['sex'];
-        $community = $_POST['community'];
-        $placeOfBirth = $_POST['place_of_birth'];
-        $bloodGroup = $_POST['blood_group'];
-        $caste = $_POST['caste'];
-        $religion = $_POST['religion'];
-        $motherTongue = $_POST['mother_tongue'];
-        $personalIdentifications = $_POST['personal_identifications'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
+    $fatherName = $_POST['Father_name'];
+    $fatherOccupation = $_POST['Father_occupation'];
+    $fatherMobile = $_POST['father_Mobile_number'];
+    $motherName = $_POST['Mother_name'];
+    $motherOccupation = $_POST['Mother_occupation'];
+    $motherMobile = $_POST['mother_Mobile_number'];
+    $issueDate = $_POST['issue_date'];
+    $issueDescription = $_POST['issue_description'];
+    $actionTaken = $_POST['action_taken'];
+    $staffHandle = $_POST['Staff_Handle'];
 
-        // Update the basic details in the database
-        $sqlUpdateBasicDetails = "
-        UPDATE students SET 
-            name = ?, 
-            department = ?, 
-            year = ?, 
-            dob = ?,
-            age = ?,
-            sex = ?, 
-            community = ?, 
-            place_of_birth = ?, 
-            blood_group = ?, 
-            caste = ?, 
-            religion = ?, 
-            mother_tongue = ?, 
-            personal_identifications = ?, 
-            email = ?, 
-            phone = ?
-        WHERE roll_no = ?";
+    // File uploads
+    $studentPhoto = null;
+    $familyPhoto = null;
+    $documentUpload = null;
 
-        $stmt = $conn->prepare($sqlUpdateBasicDetails);
-        $stmt->bind_param(
-            'ssssssssssssssss',
-            $name,
-            $department,
-            $year,
-            $dob,
-            $age,
-            $sex,
-            $community,
-            $placeOfBirth,
-            $bloodGroup,
-            $caste,
-            $religion,
-            $motherTongue,
-            $personalIdentifications,
-            $email,
-            $phone,
-            $roll_no
-        );
-
-        if ($stmt->execute()) {
-            echo "Basic details updated successfully.";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
+    if (isset($_FILES['student-photo']) && $_FILES['student-photo']['error'] == 0) {
+        $studentPhoto = $_FILES['student-photo']['name'];
+        if (in_array(pathinfo($studentPhoto, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
+            move_uploaded_file($_FILES['student-photo']['tmp_name'], './student_details/student_photo/' . $studentPhoto);
         } else {
-            echo "Error updating basic details: " . $conn->error;
+            echo "Invalid photo format.";
+            exit();
         }
     }
 
-    elseif ($formName == 'reference_persons') {
-            $reference_name = $_POST["reference_name"];
-            $reference_phone = $_POST["reference_phone"];
-            $reference_address = $_POST["reference_text"];
-            $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : null;
-            
-            $sqlInsertReferencePersons = "
-            INSERT INTO reference_persons (student_roll_no, name, phone_no, address) 
-            VALUES (?, ?, ?, ?)";
-    
-            $stmt = $conn->prepare($sqlInsertReferencePersons);
-            $stmt->bind_param(
-                'ssss',
-                $roll_no,
-                $reference_name,
-                $reference_phone,
-                $reference_address
-            );
-    
-            if ($stmt->execute()) {
-                echo "Reference person  details inserted successfully.<br>";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
-            } else {
-                echo "Error inserting reference person details: " . $conn->error . "<br>";
+    if (isset($_FILES['family-photo']) && $_FILES['family-photo']['error'] == 0) {
+        $familyPhoto = $_FILES['family-photo']['name'];
+        if (in_array(pathinfo($familyPhoto, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
+            move_uploaded_file($_FILES['family-photo']['tmp_name'], './student_details/family_photo/' . $familyPhoto);
+        } else {
+            echo "Invalid family photo format.";
+            exit();
+        }
+    }
+
+    if (isset($_FILES['Document_upload']) && $_FILES['Document_upload']['error'] == 0) {
+        $documentUpload = $_FILES['Document_upload']['name'];
+        $fileTmpPath = $_FILES['Document_upload']['tmp_name'];
+        $fileExtension = pathinfo($documentUpload, PATHINFO_EXTENSION);
+
+        // Check if the file type is PDF
+        if ($fileExtension == 'pdf') {
+            // Define the target directory
+            $targetDir = './student_details/disciplinary_issues_doc/';
+
+            // Check if the target directory exists, if not, create it
+            if (!is_dir($targetDir)) {
+                mkdir($targetDir, 0755, true); // Create directory with proper permissions
             }
-        
-    }
 
-    elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_name']) && $_POST['form_name'] == 'reference_persons_update') {
-        $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : null;
-
-    // Check for delete actions
-    $i = 1;
-    while (isset($_POST["delete_{$i}"])) {
-        $reference_person_id = $_POST["delete_{$i}"];
-        
-        // Delete the reference person record
-        $delete_query = "DELETE FROM reference_persons WHERE id = ? AND student_roll_no = ?";
-        $stmt = $conn->prepare($delete_query);
-        $stmt->bind_param('is', $reference_person_id, $roll_no);
-        if ($stmt->execute()) {
-            echo "Reference person {$i} deleted successfully.<br>";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
-        } else {
-            echo "Error deleting reference person {$i}: " . $conn->error . "<br>";
-        }
-        $i++;
-    }
-
-    // Check for update actions
-    $i = 1;
-    while (isset($_POST["update_{$i}"])) {
-        $reference_person_id = $_POST["update_{$i}"];
-        $reference_name = $_POST["reference_name_{$i}"];
-        $reference_phone = $_POST["reference_phone_{$i}"];
-        $reference_address = $_POST["reference_text_{$i}"];
-
-        // Ensure the fields are not empty
-        if (!empty($reference_name) && !empty($reference_phone) && !empty($reference_address)) {
-            // Prepare the update query
-            $sqlUpdateReferencePersons = "
-                UPDATE reference_persons 
-                SET name = ?, phone_no = ?, address = ? 
-                WHERE id = ? AND student_roll_no = ?";
-
-            $stmt = $conn->prepare($sqlUpdateReferencePersons);
-            $stmt->bind_param('sssis', $reference_name, $reference_phone, $reference_address, $reference_person_id, $roll_no);
-
-            // Execute the query
-            if ($stmt->execute()) {
-                echo "Reference person {$i} updated successfully.<br>";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
-
+            // Move the uploaded file to the target directory
+            if (move_uploaded_file($fileTmpPath, $targetDir . $documentUpload)) {
+                echo "PDF file uploaded successfully.";
             } else {
-                echo "Error updating reference person {$i}: " . $conn->error . "<br>";
-            }
-        } else {
-            echo "Please fill all fields for reference person {$i}.<br>";
-        }
-        $i++;
-    }
-}
-
-    elseif ($formName == 'profile_photos') {
-        // File uploads for profile photos, family photos, and documents
-        $studentPhoto = null;
-        $familyPhoto = null;
-
-
-        // Handle student photo upload
-        if (isset($_FILES['student-photo']) && $_FILES['student-photo']['error'] == 0) {
-            $studentPhoto = $_FILES['student-photo']['name'];
-            if (in_array(pathinfo($studentPhoto, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
-                move_uploaded_file($_FILES['student-photo']['tmp_name'], './student_details/student_photo/' . $studentPhoto);
-            } else {
-                echo "Invalid student photo format.";
+                echo "Error in uploading the document.";
                 exit();
             }
-        }
-
-        // Handle family photo upload
-        if (isset($_FILES['family-photo']) && $_FILES['family-photo']['error'] == 0) {
-            $familyPhoto = $_FILES['family-photo']['name'];
-            if (in_array(pathinfo($familyPhoto, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
-                move_uploaded_file($_FILES['family-photo']['tmp_name'], './student_details/family_photo/' . $familyPhoto);
-            } else {
-                echo "Invalid family photo format.";
-                exit();
-            }
-        }
-
-        // Handle document upload
-       
-
-        // Update the student profile photos and documents
-        $sqlUpdatePhotos = "
-        UPDATE students SET 
-            profile_photo = ?, 
-            family_photo = ?, 
-        WHERE roll_no = ?";
-
-        $stmt = $conn->prepare($sqlUpdatePhotos);
-        $stmt->bind_param(
-            'sss',
-            $studentPhoto,
-            $familyPhoto,
-            $roll_no
-        );
-
-        if ($stmt->execute()) {
-            echo "Photos and document updated successfully.";
         } else {
-            echo "Error updating photos and document: " . $conn->error;
+            echo "Invalid document format. Only PDF files are allowed.";
+            exit();
         }
     }
+
+
+    // Update student profile
+    $sqlUpdateStudent = "
+    UPDATE students SET 
+        name = ?, 
+        department = ?, 
+        year = ?, 
+        dob = ?,
+        roll_no = ?,
+        age = ?,
+        sex = ?, 
+        community = ?, 
+        place_of_birth = ?, 
+        blood_group = ?, 
+        caste = ?, 
+        religion = ?, 
+        mother_tongue = ?, 
+        personal_identifications = ?, 
+        email = ?, 
+        phone = ?, 
+        profile_photo = ?, 
+        family_photo = ?, 
+        father_name = ?, 
+        father_occupation = ?, 
+        father_phone = ?, 
+        mother_name = ?, 
+        mother_occupation = ?, 
+        mother_phone = ?, 
+        issue_date = ?, 
+        issue_description = ?, 
+        action_taken = ?, 
+        staff_handle = ?, 
+        document_upload = ? 
+    WHERE roll_no = ?";
+
+    $stmt = $conn->prepare($sqlUpdateStudent);
+    $stmt->bind_param(
+        'ssssssssssssssssssssssssssssss',
+        $name,
+        $department,
+        $year,
+        $dob,
+        $roll_no,
+        $age,
+        $sex,
+        $community,
+        $placeOfBirth,
+        $bloodGroup,
+        $caste,
+        $religion,
+        $motherTongue,
+        $personalIdentifications,
+        $email,
+        $phone,
+        $studentPhoto,
+        $familyPhoto,
+        $fatherName,
+        $fatherOccupation,
+        $fatherMobile,
+        $motherName,
+        $motherOccupation,
+        $motherMobile,
+        $issueDate,
+        $issueDescription,
+        $actionTaken,
+        $staffHandle,
+        $documentUpload,
+        $roll_no
+    );
+
+
+    if ($stmt->execute()) {
+        echo "Student profile updated successfully.";
+        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
+    } else {
+        echo "Error updating student profile: " . $conn->error;
+    }
+
+    // Update CGPA data
+    $sqlUpdateCGPA = "
+        UPDATE student_cgpa 
+        SET 
+            cgpa_sem1 = ?, 
+            cgpa_sem2 = ?, 
+            cgpa_sem3 = ?, 
+            cgpa_sem4 = ?, 
+            cgpa_sem5 = ?, 
+            cgpa_sem6 = ?, 
+            cgpa_sem7 = ?, 
+            cgpa_sem8 = ?, 
+            cgpa_cumulative = ? 
+        WHERE student_roll_no = ?";
+
+    $stmt = $conn->prepare($sqlUpdateCGPA);
+    $stmt->bind_param(
+        'ddddddddds',
+        $cgpaSemesters[0],
+        $cgpaSemesters[1],
+        $cgpaSemesters[2],
+        $cgpaSemesters[3],
+        $cgpaSemesters[4],
+        $cgpaSemesters[5],
+        $cgpaSemesters[6],
+        $cgpaSemesters[7],
+        $cgpa,
+        $roll_no
+    );
+
+    if ($stmt->execute()) {
+        echo "CGPA data updated successfully.";
+    } else {
+        echo "Error updating CGPA data: " . $conn->error;
+    }
 }
+$docPath = "./student_details/disciplinary_issues_doc/" . htmlspecialchars($student['document_upload']);
+$docfile = file_exists($docPath);
+
+$profilePath = "./student_details/student_photo/" . htmlspecialchars($student['profile_photo']);
+$imageFound = file_exists($profilePath);
+
+$familyPath = "./student_details/family_photo/" . htmlspecialchars($student['family_photo']);
+$family_imageFound = file_exists($familyPath);
+
+
 ?>
 
 
@@ -257,15 +267,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Student Edit | <?php echo htmlspecialchars($student["name"]); ?></title>
-    <style>
-        .action_btn{
-            padding: 6px;
-            color: white;
-            background: #007bff;
-            border: none;
-            border-radius: 5px;
-        }
-    </style>
 
 </head>
 
@@ -284,10 +285,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     
             <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data" name="basic_details">
-            <input type="hidden" name="form_name" value="basic_details">
+    
     <!-- Register Number (Read-only) -->
     <label for="Register_Number">Register Number</label>
-    <input type="text" id="roll_nor" name="roll_no" value="<?php echo htmlspecialchars($student["roll_no"]); ?>" readonly>
+    <input type="text" id="Register_Number" name="Register_Number" value="<?php echo htmlspecialchars($student["roll_no"]); ?>" readonly>
 
     <!-- Name (Read-only) -->
     <label for="name">Name</label>
@@ -386,58 +387,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </form>
 
-<!-- REFERENCE PERSON UPDATE -->
-<form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data" name="reference_persons_update">
-    <input type="hidden" name="form_name" value="reference_persons_update">
-    
-    <label for="reference-persons">Reference Persons</label><br>
-    <table>
-        <thead>
-            <tr>
-                <th>S.No</th>
-                <th>Name</th>
-                <th>Phone No</th>
-                <th>Address</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            // Fetching reference persons from the database
-            $reference_persons_query = "SELECT * FROM reference_persons WHERE student_roll_no = ?";
-            $stmt = $conn->prepare($reference_persons_query);
-            $stmt->bind_param('s', $roll_no);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            $i = 1;
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>{$i}</td>
-                        <td><input type='text' name='reference_name_{$i}' value='" . htmlspecialchars($row['name']) . "' placeholder='Enter name'></td>
-                        <td><input type='text' name='reference_phone_{$i}' value='" . htmlspecialchars($row['phone_no']) . "' placeholder='Enter phone no'></td>
-                        <td><textarea name='reference_text_{$i}' rows='2' placeholder='Enter address'>" . htmlspecialchars($row['address']) . "</textarea></td>
-                        <td>
-                            <button type='submit' class='action_btn' name='update_{$i}' value='{$row['id']}'>Update</button>
-                            <button type='submit' class='action_btn' name='delete_{$i}' value='{$row['id']}'>Delete</button>
-                        </td>
-                    </tr>";
-                $i++;
-            }
-            ?>
-        </tbody>
-    </table>
 
-</form>
-
-
-
-<!-- REFERENCE PERSONINSERT -->
 <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  name="reference_persons">
-
-<input type="hidden" name="form_name" value="reference_persons">
-
-                    <label for="reference-persons">Reference Persons Insert</label><br>
+                    <label for="reference-persons">Reference Persons</label><br>
                     <table>
                         <thead>
                             <tr>
@@ -450,21 +402,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td><input type="text" name="reference_name" placeholder="Enter name"></td>
-                                <td><input type="text" name="reference_phone" placeholder="Enter phone no"></td>
-                                <td><textarea name="reference_text" rows="2" placeholder="Enter address" ></textarea></td>
+                                <td><input type="text" name="name_1" placeholder="Enter name"></td>
+                                <td><input type="text" name="phone_1" placeholder="Enter phone no"></td>
+                                <td><textarea name="address_1" rows="2" placeholder="Enter address"></textarea></td>
                             </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><input type="text" name="name_1" placeholder="Enter name"></td>
+                                <td><input type="text" name="phone_1" placeholder="Enter phone no"></td>
+                                <td><textarea name="address_1" rows="2" placeholder="Enter address"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><input type="text" name="name_1" placeholder="Enter name"></td>
+                                <td><input type="text" name="phone_1" placeholder="Enter phone no"></td>
+                                <td><textarea name="address_1" rows="2" placeholder="Enter address"></textarea></td>
+                            </tr>
+                            <!-- Add more rows as needed -->
                         </tbody>
                     </table>
 
 
- <button type="submit" class="submit-btn">INSERT</button>
+ <button type="submit" class="submit-btn">Update</button>
 
 </form>
-
-<!-- REFERENCE PERSON INSERT  END-->
-
-<!-- CGPA INSERT UPDATE DELETE -->
+           
 <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  name="cgpa_section">
                     <label for="gpa">GPA</label><br>
 
@@ -516,11 +478,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="submit" class="submit-btn">Update</button>
 
 </form>
-
-
-
-
-<!--  -->
 <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  name="photo_person">
 
                     <label for="family-photo">Student Photo:</label><br>
