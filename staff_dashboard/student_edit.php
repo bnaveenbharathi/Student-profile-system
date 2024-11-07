@@ -1,70 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Profile Management System</title>
+
+    <link rel="stylesheet" href="../static/dash/style.css">
+    <link rel="stylesheet" href="../static/staffdash/custom.css">
+
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+
+    <title>Student View | Name</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            width: 600px;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            overflow-y: auto;
-            max-height: 90vh;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="email"], input[type="number"], input[type="date"], select, textarea {
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        .submit-btn {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #5c85d6;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .submit-btn:hover {
-            background-color: #4a6ba3;
-        }
+       /* General Form Styling */
+form {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+form label {
+    font-weight: bold;
+    color: #333;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="date"],
+form input[type="email"],
+form select,
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    color: #666;
+}
+
+form input[readonly],
+form select[readonly],
+form textarea[readonly] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+form input[type="file"] {
+    padding: 5px;
+    margin-top: 10px;
+    color: #666;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th, table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Flexbox for Two-Column Layout */
+div[style*="display: flex;"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+div[style*="display: flex;"] > div {
+    flex: 1;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Styles for File Uploads */
+input[type="file"] {
+    background-color: #e9ecef;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #0056b3;
+}
+
+.student-photo-container,.family-photo-container{
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+
+}
+.student-photo{ 
+    min-width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #7ad100;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.family-photo{ 
+    max-width: 580px;
+    height: 380px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 4px solid #7ad100;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.disciplinary-proof{
+    display: flex;
+    justify-content: center;
+
+}
+.disciplinary-proof-image{
+    width: 580px;
+    height: 280px;
+
+}
+/* Additional Comments Section */
+#comments {
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    form {
+        width: 100%;
+        padding: 10px;
+    }
+
+    div[style*="display: flex;"] {
+        flex-direction: column;
+    }
+
+    .submit-btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
     </style>
+
+    <title>Staff Dashboard </title>
 </head>
+
 <body>
-    <div class="container">
-        <h2>Student Profile Management System</h2>
-        <form action="/submit-profile" method="POST">
+
+    <?php include("./sidebar.php") ?>
+
+    <div class="dash-content">
+        <div class="overview">
+            <div class="title">
+                <i class="uil uil-user"></i>
+
+                <span class="text">Profile</span>
+            </div>
+
+            <!-- Profile  -->
+            <div class="container">
+
+            <form action="/submit-profile" method="POST">
             <label for="Register_Number">Register Number</label>
             <input type="text" id="Register_Number" name="Register_Number" required>
 
@@ -239,10 +384,23 @@
             <label for="family-photo">Student Photo:</label><br>
             <input type="file" id="student-photo" name="student-photo" accept="image/*"><br>
 
+            <div class="student-photo-container">
+
+<img src="../static/img/profile.png" alt="" class="student-photo">
+
+</div>
+
+
             <label for="family-photo">Family Photo:</label><br>
             <input type="file" id="family-photo" name="family_photo" accept="image/*"><br>
 
-            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+            <div class="family-photo-container">
+
+<img src="../static/img/profile.png" alt="" class="family-photo">
+
+</div>
+
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;margin-top:20px;">
                 <div>
                   <label for="Father-name">Father Name:</label>
                   <input type="text" id="Father-name" name="Father_name" placeholder="Enter Father name">
@@ -315,13 +473,28 @@
             </div><br>
 
                 <label for="Document upload">Document upload</label><br>
-                <input type="file" id="Document upload" name="Document upload" accept="image/*"><br>
-        
-          
+                <input type="file" id="Document upload" name="Document upload" accept="image/*" ><br>
+                   
+
+                
+                <div class="disciplinary-proof mt-5">
+
+<img src="" alt="" class="disciplinary-proof-image">
+
+</div>
+                   
            
 
             <button type="submit" class="submit-btn">Submit Profile</button>
         </form>
-    </div>
+
+
+
+            </div>
+
+
+
+            <script src="../static/dash/script.js"></script>
 </body>
+
 </html>
