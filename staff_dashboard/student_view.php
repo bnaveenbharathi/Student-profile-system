@@ -11,9 +11,11 @@ if (!isset($_SESSION['staff_id'])) {
 
 $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : null;
 
-if (!$roll_no) {
+if (!isset($_GET['roll_no']) || empty($_GET['roll_no'])) {
     echo "Student Roll No. not specified!";
     exit();
+} else {
+    $roll_no = $_GET['roll_no'];
 }
 
 $student_query = "SELECT * FROM students WHERE roll_no = ?";

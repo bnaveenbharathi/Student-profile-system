@@ -1,10 +1,188 @@
+<?php
+session_start();
+include("../resources/connection.php");
+
+if (!isset($_SESSION['staff_id'])) {
+    header("Location: ../staff_login.php");
+    exit();
+}
+
+$roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : null;
+if (!$roll_no) {
+    echo "Student Roll No. not specified!";
+    exit();
+}
+
+$student_query = "SELECT * FROM students WHERE roll_no = ?";
+$stmt = $conn->prepare($student_query);
+if (!$stmt) {
+    die("Error preparing statement: " . $conn->error);
+}
+
+$stmt->bind_param("s", $roll_no);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "No student found with Roll No.: " . htmlspecialchars($roll_no);
+    exit();
+}
+
+$student = $result->fetch_assoc();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $registerNumber = $_POST['Register_Number'];
+    $name = $_POST['name'];
+    $department = $_POST['department'];
+    $year = $_POST['year'];
+    $dob = $_POST['dob'];
+    $age = $_POST['Age'];
+    $sex = $_POST['sex'];
+    $community = $_POST['community'];
+    $placeOfBirth = $_POST['place_of_birth'];
+    $bloodGroup = $_POST['blood_group'];
+    $caste = $_POST['caste'];
+    $religion = $_POST['religion'];
+    $motherTongue = $_POST['mother_tongue'];
+    $personalIdentifications = $_POST['personal_identifications'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $cgpa = $_POST['total_CGPA'];
+    $cgpaSemesters = [
+        $_POST['cgpa_sem1'], $_POST['cgpa_sem2'], $_POST['cgpa_sem3'],
+        $_POST['cgpa_sem4'], $_POST['cgpa_sem5'], $_POST['cgpa_sem6'],
+        $_POST['cgpa_sem7'], $_POST['cgpa_sem8']
+    ];
+
+    $fatherName = $_POST['Father_name'];
+    $fatherOccupation = $_POST['Father_occupation'];
+    $fatherMobile = $_POST['father_Mobile_number'];
+    $motherName = $_POST['Mother_name'];
+    $motherOccupation = $_POST['Mother_occupation'];
+    $motherMobile = $_POST['mother_Mobile_number'];
+    $issueDate = $_POST['issue_date'];
+    $issueDescription = $_POST['issue_description'];
+    $actionTaken = $_POST['action_taken'];
+    $staffHandle = $_POST['Staff_Handle'];
+
+    // File uploads
+    $studentPhoto = null;
+    $familyPhoto = null;
+    $documentUpload = null;
+
+    if (isset($_FILES['student-photo']) && $_FILES['student-photo']['error'] == 0) {
+        $studentPhoto = $_FILES['student-photo']['name'];
+        if (in_array(pathinfo($studentPhoto, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
+            move_uploaded_file($_FILES['student-photo']['tmp_name'], './student_details/student_photo/' . $studentPhoto);
+        } else {
+            echo "Invalid photo format.";
+            exit();
+        }
+    }
+
+    if (isset($_FILES['family-photo']) && $_FILES['family-photo']['error'] == 0) {
+        $familyPhoto = $_FILES['family-photo']['name'];
+        if (in_array(pathinfo($familyPhoto, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
+            move_uploaded_file($_FILES['family-photo']['tmp_name'], 'uploads/' . $familyPhoto);
+        } else {
+            echo "Invalid family photo format.";
+            exit();
+        }
+    }
+
+    if (isset($_FILES['Document upload']) && $_FILES['Document upload']['error'] == 0) {
+        $documentUpload = $_FILES['Document upload']['name'];
+        if (in_array(pathinfo($documentUpload, PATHINFO_EXTENSION), ['pdf', 'doc', 'docx'])) {
+            move_uploaded_file($_FILES['Document upload']['tmp_name'], 'uploads/' . $documentUpload);
+        } else {
+            echo "Invalid document format.";
+            exit();
+        }
+    }
+
+    // Update student profile
+    $sqlUpdateStudent = "
+    UPDATE students SET 
+        name = ?, 
+        department = ?, 
+        year = ?, 
+        dob = ?,
+        roll_no = ?,
+        age = ?,
+        sex = ?, 
+        community = ?, 
+        place_of_birth = ?, 
+        blood_group = ?, 
+        caste = ?, 
+        religion = ?, 
+        mother_tongue = ?, 
+        personal_identifications = ?, 
+        email = ?, 
+        phone = ?, 
+        profile_photo = ?, 
+        family_photo = ?, 
+        father_name = ?, 
+        father_occupation = ?, 
+        father_phone = ?, 
+        mother_name = ?, 
+        mother_occupation = ?, 
+        mother_phone = ?, 
+        issue_date = ?, 
+        issue_description = ?, 
+        action_taken = ?, 
+        staff_handle = ?, 
+        document_upload = ? 
+    WHERE roll_no = ?";
+
+$stmt = $conn->prepare($sqlUpdateStudent);
+$stmt->bind_param(
+    'ssssssssssssssssssssssssssssss',  
+    $name, $department, $year, $dob, $roll_no, $age, $sex, $community, 
+    $placeOfBirth, $bloodGroup, $caste, $religion, $motherTongue, 
+    $personalIdentifications, $email, $phone, $studentPhoto, $familyPhoto, 
+    $fatherName, $fatherOccupation, $fatherMobile, $motherName, $motherOccupation, 
+    $motherMobile, $issueDate, $issueDescription, $actionTaken, $staffHandle, 
+    $documentUpload, $roll_no
+);
 
 
+    if ($stmt->execute()) {
+        echo "Student profile updated successfully.";
+        header("Location: ./student_list.php");
+    } else {
+        echo "Error updating student profile: " . $conn->error;
+    }
 
+    // Update CGPA data
+    $sqlUpdateCGPA = "
+        UPDATE student_cgpa 
+        SET 
+            cgpa_sem1 = ?, 
+            cgpa_sem2 = ?, 
+            cgpa_sem3 = ?, 
+            cgpa_sem4 = ?, 
+            cgpa_sem5 = ?, 
+            cgpa_sem6 = ?, 
+            cgpa_sem7 = ?, 
+            cgpa_sem8 = ?, 
+            cgpa_cumulative = ? 
+        WHERE student_id = ?";
 
+    $stmt = $conn->prepare($sqlUpdateCGPA);
+    $stmt->bind_param(
+        'ddddddddds', 
+        $cgpaSemesters[0], $cgpaSemesters[1], $cgpaSemesters[2], 
+        $cgpaSemesters[3], $cgpaSemesters[4], $cgpaSemesters[5], 
+        $cgpaSemesters[6], $cgpaSemesters[7], $cgpa, $roll_no
+    );
 
-
-
+    if ($stmt->execute()) {
+        echo "CGPA data updated successfully.";
+    } else {
+        echo "Error updating CGPA data: " . $conn->error;
+    }
+}
+?>
 
 
 <!DOCTYPE html>
@@ -16,188 +194,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="../static/dash/style.css">
-    <link rel="stylesheet" href="../static/staffdash/custom.css">
+    <link rel="stylesheet" href="../static/staffdash/studentedit.css">
 
     <!----===== Iconscout CSS ===== -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
-    <title>Student View | Name</title>
-    <style>
-       /* General Form Styling */
-form {
-    width: 80%;
-    margin: auto;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
-}
-
-form label {
-    font-weight: bold;
-    color: #333;
-}
-
-form input[type="text"],
-form input[type="number"],
-form input[type="date"],
-form input[type="email"],
-form select,
-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f0f0f0;
-    color: #666;
-}
-
-form input[readonly],
-form select[readonly],
-form textarea[readonly] {
-    background-color: #e9ecef;
-    cursor: not-allowed;
-}
-
-form input[type="file"] {
-    padding: 5px;
-    margin-top: 10px;
-    color: #666;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-table th, table td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-table th {
-    background-color: #f5f5f5;
-    color: #333;
-}
-
-.submit-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px;
-}
-
-.submit-btn:hover {
-    background-color: #0056b3;
-}
-
-/* Flexbox for Two-Column Layout */
-div[style*="display: flex;"] {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 10px;
-}
-
-div[style*="display: flex;"] > div {
-    flex: 1;
-}
-
-textarea {
-    resize: vertical;
-}
-
-/* Styles for File Uploads */
-input[type="file"] {
-    background-color: #e9ecef;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 100%;
-}
-
-input[type="file"]::file-selector-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-input[type="file"]::file-selector-button:hover {
-    background-color: #0056b3;
-}
-
-.student-photo-container,.family-photo-container{
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-
-}
-.student-photo{ 
-    min-width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #7ad100;
-    transition: border-color 0.3s ease, transform 0.3s ease;
-}
-.family-photo{ 
-    max-width: 580px;
-    height: 380px;
-    border-radius: 10px;
-    object-fit: cover;
-    border: 4px solid #7ad100;
-    transition: border-color 0.3s ease, transform 0.3s ease;
-}
-.disciplinary-proof{
-    display: flex;
-    justify-content: center;
-
-}
-.disciplinary-proof-image{
-    width: 580px;
-    height: 280px;
-
-}
-/* Additional Comments Section */
-#comments {
-    margin-top: 10px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    form {
-        width: 100%;
-        padding: 10px;
-    }
-
-    div[style*="display: flex;"] {
-        flex-direction: column;
-    }
-
-    .submit-btn {
-        font-size: 14px;
-        padding: 8px;
-    }
-}
-
-    </style>
-
-    <title>Staff Dashboard </title>
+    <title>Student Edit | <?php echo htmlspecialchars($student["name"]); ?></title>
+  
 </head>
 
 <body>
@@ -213,17 +218,19 @@ input[type="file"]::file-selector-button:hover {
             <!-- Profile  -->
             <div class="container">
 
-            <form action="/submit-profile" method="POST">
+            <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST"  enctype="multipart/form-data">
             <label for="Register_Number">Register Number</label>
-            <input type="text" id="Register_Number" name="Register_Number" required>
+            <input type="text" id="Register_Number" name="Register_Number"  value="<?php echo htmlspecialchars($student["roll_no"]); ?>" readonly>
 
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" required><br>
+            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($student["name"]); ?>" readonly><br>
 
             <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
               <div>  
                 <label for="department">Department</label>
-                    <select id="department" name="department" required>
+                <input type="text" id="department" name="department" readonly value="<?php echo htmlspecialchars($student["department"]); ?>"><br>
+                    <select id="department" name="department" >
+                        <option selected disabled >Select</option>
                         <option value="AI&DS">Artificial Intelligence and Data Science</option>
                         <option value="IT">Information Technology</option>
                         <option value="CSE">Computer Science</option>
@@ -238,19 +245,15 @@ input[type="file"]::file-selector-button:hover {
               <div>
 
                 <label for="year">Year of Study</label>
-                <select id="year" name="year" required>
-                    <option value="1">1st Year</option>
-                    <option value="2">2nd Year</option>
-                    <option value="3">3rd Year</option>
-                    <option value="4">4th Year</option>
-                </select>
+                <input type="text" id="year" name="year"  value="<?php echo htmlspecialchars($student["year"]); ?>"><br>
+                
               </div>
             </div><br>
             
             <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                 <div>
                     <label for="dob">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" required>
+                    <input type="date" id="dob" name="dob" >
                 </div>
                 <div>
                     <label for="Age">Age</label>
@@ -259,7 +262,8 @@ input[type="file"]::file-selector-button:hover {
             </div>
 
             <label for="sex">Sex</label>
-            <select id="sex" name="sex" required>
+            <select id="sex" name="sex" >
+                <option selected disabled>select</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
@@ -269,10 +273,10 @@ input[type="file"]::file-selector-button:hover {
             <input type="text" id="community" name="community">
 
             <label for="place-of-birth">Place of Birth</label>
-            <input type="text" id="place-of-birth" name="place_of_birth" required>
+            <input type="text" id="place-of-birth" name="place_of_birth" >
 
             <label for="blood-group">Blood Group</label>
-            <select id="blood-group" name="blood_group" required>
+            <select id="blood-group" name="blood_group" >
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
                 <option value="B+">B+</option>
@@ -330,10 +334,10 @@ input[type="file"]::file-selector-button:hover {
             <textarea id="personal-identifications" name="personal_identifications" rows="3" placeholder="Enter unique identification marks or features"></textarea>
 
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" >
 
             <label for="phone">Phone</label>
-            <input type="text" id="phone" name="phone" required>
+            <input type="text" id="phone" name="phone" >
 
             
 
@@ -343,54 +347,54 @@ input[type="file"]::file-selector-button:hover {
             <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                 <div>
                     <label for="gpa">sem 1</label><br>
-                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                    <input type="number" id="gpa" name="cgpa_sem1" step="0.01" min="0" max="10" >  <br>
             
                 </div>
 
                 <div>
                     <label for="gpa">sem 2</label><br>
-                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                    <input type="number" id="gpa" name="cgpa_sem2" step="0.01" min="0" max="10" >  <br>
                 </div>
             </div><br>
             <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                 <div>
                     <label for="gpa">sem 3</label><br>
-                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                    <input type="number" id="gpa" name="cgpa_sem3" step="0.01" min="0" max="10" >  <br>
                 </div>
                 <div>
                     <label for="gpa">sem 4</label><br>
-                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                    <input type="number" id="gpa" name="cgpa_sem4" step="0.01" min="0" max="10" >  <br>
                 </div>
             </div><br>
             <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                 <div>
                     <label for="gpa">sem 5</label><br>
-                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                    <input type="number" id="gpa" name="cgpa_sem5" step="0.01" min="0" max="10" >  <br>
                 </div>
                 <div>
                     <label for="gpa">sem 6</label><br>
-                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                    <input type="number" id="gpa" name="cgpa_sem6" step="0.01" min="0" max="10" >  <br>
                 </div>
             </div><br>
             <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                 <div>
                     <label for="gpa">sem 7</label><br>
-                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                    <input type="number" id="gpa" name="cgpa_sem7" step="0.01" min="0" max="10" >  <br>
                 </div>
                 <div>
                     <label for="gpa">sem 8 </label><br>
-                    <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="10" required>  <br>
+                    <input type="number" id="gpa" name="cgpa_sem8" step="0.01" min="0" max="10" >  <br>
                 </div>
             </div><br><br>
             <label for="CGPA">CGPA</label><br>
-            <input type="number" id="CGPA" name="CGPA" step="0.01" min="0" max="10" required> <br>
+            <input type="number" id="CGPA" name="total_CGPA" step="0.01" min="0" max="10" > <br>
 
             <label for="family-photo">Student Photo:</label><br>
             <input type="file" id="student-photo" name="student-photo" accept="image/*"><br>
 
             <div class="student-photo-container">
 
-<img src="../static/img/profile.png" alt="" class="student-photo">
+<img src="./student_details/student_photo/<?php echo htmlspecialchars($student['profile_photo']); ?>" alt="" class="student-photo">
 
 </div>
 
@@ -421,8 +425,8 @@ input[type="file"]::file-selector-button:hover {
                 </div>
 
                 <div>
-                    <label for="Mobile number">Mobile number:</label>
-                    <input type="text" id="Mobile number" name="Mobile number" placeholder="Enter Mobile number">
+                    <label for="Mobile_number">Mobile number:</label>
+                    <input type="text" id="father_Mobile_number" name="father_Mobile_number" placeholder="Enter Mobile number">
                 </div>
             </div><br>
 
@@ -442,8 +446,8 @@ input[type="file"]::file-selector-button:hover {
                 </div>
 
                 <div>
-                    <label for="Mobile number">Mobile number:</label>
-                    <input type="text" id="Mobile number" name="Mobile number" placeholder="Enter Mobile number">
+                    <label for="Mobile_number">Mobile number:</label>
+                    <input type="text" id="mother_Mobile_number" name="mother_Mobile_number" placeholder="Enter Mobile number">
                 </div>
             </div><br>
 
@@ -466,15 +470,12 @@ input[type="file"]::file-selector-button:hover {
             </div>
 
             <div style="margin-bottom: 10px;">
-                <label for="Staff Handle">Staff Handle</label><br>
-                <textarea id="Staff Handle" name="Staff Handle" rows="2" placeholder="Enter staff name"></textarea>
+                <label for="Staff_Handle">Staff_Handle</label><br>
+                <textarea id="Staff_Handle" name="Staff_Handle" rows="2" placeholder="Enter staff name"></textarea>
             </div>
           
               
-            <div style="margin-bottom: 10px;">
-                  <label for="comments">Additional Comments:</label><br>
-                  <textarea id="comments" name="comments" rows="2" placeholder="Any additional comments"></textarea>
-            </div><br>
+            <br>
 
                 <label for="Document upload">Document upload</label><br>
                 <input type="file" id="Document upload" name="Document upload" accept="image/*" ><br>
@@ -487,8 +488,6 @@ input[type="file"]::file-selector-button:hover {
 
 </div>
                    
-           
-
             <button type="submit" class="submit-btn">Submit Profile</button>
         </form>
 
