@@ -411,12 +411,20 @@ elseif($formName == 'disciplinary_issues_update' && !empty($issue_id)){
 
 
 }
-$profilePath = "./student_details/student_photo/" . htmlspecialchars($student['profile_photo']);
+$profilePhoto = isset($student['profile_photo']) && $student['profile_photo'] !== NULL ? $student['profile_photo'] : '';
+$profilePath = "./student_details/student_photo/" . $profilePhoto;
 $imageFound = file_exists($profilePath);
 
-$familyPath = "./student_details/family_photo/" . htmlspecialchars($student['family_photo']);
+$familyPhoto = isset($student['family_photo']) && $student['family_photo'] !== NULL ? $student['family_photo'] : '';
+$familyPath = "./student_details/family_photo/" . $familyPhoto;
 $family_imageFound = file_exists($familyPath);
 
 
 
+function safe_htmlspecialchars($value) {
+    return htmlspecialchars($value !== NULL ? $value : '', ENT_QUOTES, 'UTF-8');
+}
+
+
 ?>
+
