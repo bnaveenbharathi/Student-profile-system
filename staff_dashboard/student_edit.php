@@ -21,7 +21,7 @@ include("./student_edit_backend.php")
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Edit | <?php echo htmlspecialchars($student["name"]); ?></title>
+    <title>Student Edit | <?php echo safe_htmlspecialchars($student["name"]); ?></title>
     <style>
         .action_btn{
             padding: 6px;
@@ -90,18 +90,18 @@ include("./student_edit_backend.php")
             <input type="hidden" name="form_name" value="basic_details">
     <!-- Register Number -->
     <label for="Register_Number">Register Number</label>
-    <input type="text" id="roll_nor" name="roll_no" value="<?php echo htmlspecialchars(isset($student["roll_no"]) ? $student['roll_no']  : '' ); ?>" readonly>
+    <input type="text" id="roll_nor" name="roll_no" value="<?php echo safe_htmlspecialchars(isset($student["roll_no"]) ? $student['roll_no']  : '' ); ?>" readonly>
 
     <!-- Name-->
     <label for="name">Name</label>
-    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($student["name"]); ?>" readonly>
+    <input type="text" id="name" name="name" value="<?php echo safe_htmlspecialchars($student["name"]); ?>" readonly>
 
     <!-- Department and Year of Study -->
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
         <!-- Department -->
         <div>
             <label for="department">Department</label>
-            <input type="text" id="department" name="department" readonly value="<?php echo htmlspecialchars($student["department"]); ?>">
+            <input type="text" id="department" name="department" readonly value="<?php echo safe_htmlspecialchars($student["department"]); ?>">
             <select id="department" name="department">
                 <option selected disabled>Select</option>
                 <option value="AI&DS">Artificial Intelligence and Data Science</option>
@@ -117,7 +117,7 @@ include("./student_edit_backend.php")
         <!-- Year of Study -->
         <div>
             <label for="year">Year of Study</label>
-            <input type="text" id="year" name="year" value="<?php echo htmlspecialchars($student["year"]); ?>">
+            <input type="text" id="year" name="year" value="<?php echo safe_htmlspecialchars($student["year"]); ?>">
         </div>
     </div>
 
@@ -126,14 +126,14 @@ include("./student_edit_backend.php")
         <!-- Date of Birth -->
         <div>
             <label for="dob">Date of Birth</label>
-            <input type="text" id="dob" name="dob" value="<?php echo htmlspecialchars($student['dob']); ?>" readonly>
+            <input type="text" id="dob" name="dob" value="<?php echo safe_htmlspecialchars($student['dob']); ?>" readonly>
             <input type="date" id="dob" name="dob" >
         </div>
 
         <!-- Age -->
         <div>
             <label for="Age">Age</label>
-            <input type="number" id="Age" name="Age" value="<?php echo htmlspecialchars($student['age']); ?>">
+            <input type="number" id="Age" name="Age" value="<?php echo safe_htmlspecialchars($student['age']); ?>">
         </div>
     </div>
 
@@ -147,10 +147,10 @@ include("./student_edit_backend.php")
 
     <!-- Additional Information -->
     <label for="community">Community</label>
-    <input type="text" id="community" name="community" value="<?php echo htmlspecialchars($student['community']); ?>">
+    <input type="text" id="community" name="community" value="<?php echo safe_htmlspecialchars($student['community']); ?>">
 
     <label for="place_of_birth">Place of Birth</label>
-    <input type="text" id="place_of_birth" name="place_of_birth" value="<?php echo htmlspecialchars(isset($student['place_of_birth']) ? $student['place_of_birth'] : ' '); ?>">
+    <input type="text" id="place_of_birth" name="place_of_birth" value="<?php echo safe_htmlspecialchars(isset($student['place_of_birth']) ? $student['place_of_birth'] : ' '); ?>">
 
     <!-- Blood Group -->
     <label for="blood_group">Blood Group</label>
@@ -167,23 +167,24 @@ include("./student_edit_backend.php")
 
     <!-- Additional Fields -->
     <label for="caste">Caste</label>
-    <input type="text" id="caste" name="caste" value="<?php echo htmlspecialchars($student['caste']); ?>">
+    <input type="text" id="caste" name="caste" value="<?php echo safe_htmlspecialchars($student['caste']); ?>">
 
     <label for="religion">Religion</label>
-    <input type="text" id="religion" name="religion" value="<?php echo htmlspecialchars($student['religion']); ?>">
+    <input type="text" id="religion" name="religion" value="<?php echo safe_htmlspecialchars($student['religion']); ?>">
 
     <label for="mother_tongue">Mother Tongue</label>
-    <input type="text" id="mother_tongue" name="mother_tongue" value="<?php echo htmlspecialchars($student['mother_tongue']); ?>">
+    <input type="text" id="mother_tongue" name="mother_tongue" value="<?php echo safe_htmlspecialchars($student['mother_tongue']); ?>">
+   
 
     <label for="personal_identifications">Personal Identifications</label>
-    <textarea id="personal_identifications" name="personal_identifications" rows="3"><?php echo htmlspecialchars($student['personal_identifications']); ?></textarea>
+    <textarea id="personal_identifications" name="personal_identifications" rows="3"><?php echo safe_htmlspecialchars($student['personal_identifications']); ?></textarea>
 
     <!-- Contact Information -->
     <label for="email">Email</label>
-    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($student['email']); ?>" readonly required>
+    <input type="email" id="email" name="email" value="<?php echo safe_htmlspecialchars($student['email']); ?>" readonly required>
 
     <label for="phone">Phone</label>
-    <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($student['phone']); ?>">
+    <input type="text" id="phone" name="phone" value="<?php echo safe_htmlspecialchars($student['phone']); ?>">
 
     <button type="submit" class="submit-btn">Update</button>
 
@@ -217,9 +218,9 @@ include("./student_edit_backend.php")
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>
                         <td>{$i}</td>
-                        <td><input type='text' name='reference_name_{$i}' value='" . htmlspecialchars($row['name']) . "' placeholder='Enter name'></td>
-                        <td><input type='text' name='reference_phone_{$i}' value='" . htmlspecialchars($row['phone_no']) . "' placeholder='Enter phone no'></td>
-                        <td><textarea name='reference_text_{$i}' rows='2' placeholder='Enter address'>" . htmlspecialchars($row['address']) . "</textarea></td>
+                        <td><input type='text' name='reference_name_{$i}' value='" . safe_htmlspecialchars($row['name']) . "' placeholder='Enter name'></td>
+                        <td><input type='text' name='reference_phone_{$i}' value='" . safe_htmlspecialchars($row['phone_no']) . "' placeholder='Enter phone no'></td>
+                        <td><textarea name='reference_text_{$i}' rows='2' placeholder='Enter address'>" . safe_htmlspecialchars($row['address']) . "</textarea></td>
                         <td>
                             <button type='submit' class='action_btn' name='update_{$i}' value='{$row['id']}'>Update</button>
                             <button type='submit' class='action_btn' name='delete_{$i}' value='{$row['id']}' onclick='return confirmDelete()' >Delete</button>
@@ -305,50 +306,50 @@ if ($cgpaData) {
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
         <div>
             <label for="gpa">sem 1</label><br>
-            <input type="number" id="gpa" name="cgpa_sem1" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[0]); ?>"> <br>
+            <input type="number" id="gpa" name="cgpa_sem1" step="0.01" min="0" max="10" value="<?php echo safe_htmlspecialchars($cgpaSemesters[0]); ?>"> <br>
         </div>
 
         <div>
             <label for="gpa">sem 2</label><br>
-            <input type="number" id="gpa" name="cgpa_sem2" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[1]); ?>"> <br>
+            <input type="number" id="gpa" name="cgpa_sem2" step="0.01" min="0" max="10" value="<?php echo safe_htmlspecialchars($cgpaSemesters[1]); ?>"> <br>
         </div>
     </div><br>
 
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
         <div>
             <label for="gpa">sem 3</label><br>
-            <input type="number" id="gpa" name="cgpa_sem3" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[2]); ?>"> <br>
+            <input type="number" id="gpa" name="cgpa_sem3" step="0.01" min="0" max="10" value="<?php echo safe_htmlspecialchars($cgpaSemesters[2]); ?>"> <br>
         </div>
         <div>
             <label for="gpa">sem 4</label><br>
-            <input type="number" id="gpa" name="cgpa_sem4" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[3]); ?>"> <br>
+            <input type="number" id="gpa" name="cgpa_sem4" step="0.01" min="0" max="10" value="<?php echo safe_htmlspecialchars($cgpaSemesters[3]); ?>"> <br>
         </div>
     </div><br>
 
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
         <div>
             <label for="gpa">sem 5</label><br>
-            <input type="number" id="gpa" name="cgpa_sem5" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[4]); ?>"> <br>
+            <input type="number" id="gpa" name="cgpa_sem5" step="0.01" min="0" max="10" value="<?php echo safe_htmlspecialchars($cgpaSemesters[4]); ?>"> <br>
         </div>
         <div>
             <label for="gpa">sem 6</label><br>
-            <input type="number" id="gpa" name="cgpa_sem6" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[5]); ?>"> <br>
+            <input type="number" id="gpa" name="cgpa_sem6" step="0.01" min="0" max="10" value="<?php echo safe_htmlspecialchars($cgpaSemesters[5]); ?>"> <br>
         </div>
     </div><br>
 
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
         <div>
             <label for="gpa">sem 7</label><br>
-            <input type="number" id="gpa" name="cgpa_sem7" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[6]); ?>"> <br>
+            <input type="number" id="gpa" name="cgpa_sem7" step="0.01" min="0" max="10" value="<?php echo safe_htmlspecialchars($cgpaSemesters[6]); ?>"> <br>
         </div>
         <div>
             <label for="gpa">sem 8 </label><br>
-            <input type="number" id="gpa" name="cgpa_sem8" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[7]); ?>"> <br>
+            <input type="number" id="gpa" name="cgpa_sem8" step="0.01" min="0" max="10" value="<?php echo safe_htmlspecialchars($cgpaSemesters[7]); ?>"> <br>
         </div>
     </div><br><br>
 
     <label for="CGPA">CGPA</label><br>
-    <input type="number" id="CGPA" name="total_CGPA" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpa); ?>"> <br>
+    <input type="number" id="CGPA" name="total_CGPA" step="0.01" min="0" max="10" value="<?php echo safe_htmlspecialchars($cgpa); ?>"> <br>
 
                     <button type="submit" class="submit-btn">Update</button>
 
@@ -358,43 +359,35 @@ if ($cgpaData) {
 
 
 <!-- PHOTO SECTION START -->
-<form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  >
-<input type="hidden" name="form_name" value="student_photo">
 
-                    <label for="family-photo">Student Photo:</label><br>
-                    <input type="file" id="student-photo" name="student-photo" accept="image/*" ><br>
-                    <div class="student-photo-container">
-
-                    <?php if ($imageFound): ?>
-    <img src="./student_details/student_photo/<?php echo htmlspecialchars($student['profile_photo']); ?>" alt="Student Photo" class="student-photo">
-<?php else: ?>
-    <p style="color:red; font-weight: bold; margin-top:30px;">File not found</p>
-<?php endif; ?>
-
-
-                    </div>
-                    <button type="submit" class="submit-btn">Update</button>
-
+<form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="form_name" value="student_photo">
+    <label for="student-photo">Student Photo:</label><br>
+    <input type="file" id="student-photo" name="student-photo" accept="image/*"><br>
+    <div class="student-photo-container">
+        <?php if ($imageFound): ?>
+            <img src="./student_details/student_photo/<?php echo safe_htmlspecialchars($student['profile_photo']); ?>" alt="Student Photo" class="student-photo">
+        <?php else: ?>
+            <p style="color:red; font-weight: bold; margin-top:30px;">File not found</p>
+        <?php endif; ?>
+    </div>
+    <button type="submit" class="submit-btn">Update</button>
 </form>
 
-<form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  >
-<input type="hidden" name="form_name" value="family_photo">
-
-
-                    <label for="family-photo">Family Photo:</label><br>
-                    <input type="file" id="family-photo" name="family-photo" accept="image/*"><br>
-
-                    <div class="family-photo-container">
-
-                    <?php if ($family_imageFound): ?>
-    <img src="./student_details/family_photo/<?php echo htmlspecialchars($student['family_photo']); ?>" alt="family Photo" class="family-photo"  style="width: 480px;object-fit:cover;">
-<?php else: ?>
-    <p style="color:red; font-weight: bold; margin-top:30px;">File not found</p>
-<?php endif; ?>   </div>
-
-<button type="submit" class="submit-btn">Update</button>
-
+<form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="form_name" value="family_photo">
+    <label for="family-photo">Family Photo:</label><br>
+    <input type="file" id="family-photo" name="family-photo" accept="image/*"><br>
+    <div class="family-photo-container">
+        <?php if ($family_imageFound): ?>
+            <img src="./student_details/family_photo/<?php echo safe_htmlspecialchars($student['family_photo']); ?>" alt="Family Photo" class="family-photo" style="width: 480px; object-fit: cover;">
+        <?php else: ?>
+            <p style="color:red; font-weight: bold; margin-top:30px;">File not found</p>
+        <?php endif; ?>
+    </div>
+    <button type="submit" class="submit-btn">Update</button>
 </form>
+
 
 <!--  PHOTO SECTION END-->
 
@@ -419,43 +412,43 @@ $parent_details = $result->fetch_assoc();
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;margin-top:20px;">
                         <div>
                             <label for="Father-name">Father Name:</label>
-                            <input type="text" id="Father-name" name="Father_name" placeholder="Enter Father name" value="<?php echo htmlspecialchars($parent_details['father_name']); ?>">
+                            <input type="text" id="Father-name" name="Father_name" placeholder="Enter Father name" value="<?php echo safe_htmlspecialchars($parent_details['father_name']); ?>">
                         </div>
 
                         <div>
                             <label for="Age">Age</label>
-                            <input type="number" id="Age" name="father_age" placeholder="<?php echo htmlspecialchars($parent_details['father_age']); ?>">
+                            <input type="number" id="Age" name="father_age" placeholder="<?php echo safe_htmlspecialchars($parent_details['father_age']); ?>">
                         </div>
 
                         <div>
                             <label for="Father-occupation">Father Occupation:</label>
-                            <input type="text" id="Father-occupation" name="Father_occupation" placeholder="Enter occupation" value="<?php echo htmlspecialchars($parent_details['father_occupation']); ?>">
+                            <input type="text" id="Father-occupation" name="Father_occupation" placeholder="Enter occupation" value="<?php echo safe_htmlspecialchars($parent_details['father_occupation']); ?>">
                         </div>
 
                         <div>
                             <label for="Mobile_number">Mobile number:</label>
-                            <input type="text" id="father_Mobile_number" name="father_Mobile_number" placeholder="Enter Mobile number" value="<?php echo htmlspecialchars($parent_details['father_phone']); ?>">
+                            <input type="text" id="father_Mobile_number" name="father_Mobile_number" placeholder="Enter Mobile number" value="<?php echo safe_htmlspecialchars($parent_details['father_phone']); ?>">
                         </div>
                     </div><br>
 
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
                         <div>
                             <label for="mother-name">Mother Name:</label>
-                            <input type="text" id="Mother-name" name="Mother_name" placeholder="Enter Mother name" value="<?php echo htmlspecialchars($parent_details['mother_name']); ?>">
+                            <input type="text" id="Mother-name" name="Mother_name" placeholder="Enter Mother name" value="<?php echo safe_htmlspecialchars($parent_details['mother_name']); ?>">
 </div>
                         <div>
                             <label for="Age">Age</label>
-                            <input type="number" id="Age" name="motherage" placeholder="<?php echo htmlspecialchars($parent_details['mother_age']); ?>" >
+                            <input type="number" id="Age" name="motherage" placeholder="<?php echo safe_htmlspecialchars($parent_details['mother_age']); ?>" >
                         </div>
 
                         <div>
                             <label for="Mother-occupation">Mother Occupation:</label>
-                            <input type="text" id="Mother-occupation" name="Mother_occupation" placeholder="Enter occupation" value="<?php echo htmlspecialchars($parent_details['mother_occupation']); ?>">
+                            <input type="text" id="Mother-occupation" name="Mother_occupation" placeholder="Enter occupation" value="<?php echo safe_htmlspecialchars($parent_details['mother_occupation']); ?>">
                         </div>
 
                         <div>
                             <label for="Mobile_number">Mobile number:</label>
-                            <input type="text" id="mother_Mobile_number" name="mother_Mobile_number" placeholder="Enter Mobile number" value="<?php echo htmlspecialchars($parent_details['mother_phone']); ?>">
+                            <input type="text" id="mother_Mobile_number" name="mother_Mobile_number" placeholder="Enter Mobile number" value="<?php echo safe_htmlspecialchars($parent_details['mother_phone']); ?>">
                         </div>
                     </div><br>
 
@@ -491,22 +484,22 @@ while ($disciplinaryData = $result->fetch_assoc()) {
 
         <div style="margin-bottom: 10px;">
             <label for="issue-date-<?php echo $disciplinaryData['id']; ?>">Issue Date:</label>
-            <input type="date" id="issue-date-<?php echo $disciplinaryData['id']; ?>" name="issue_date" value="<?php echo htmlspecialchars($issueDate); ?>">
+            <input type="date" id="issue-date-<?php echo $disciplinaryData['id']; ?>" name="issue_date" value="<?php echo safe_htmlspecialchars($issueDate); ?>">
         </div>
 
         <div style="margin-bottom: 10px;">
             <label for="issue-description-<?php echo $disciplinaryData['id']; ?>">Issue Description:</label>
-            <textarea id="issue-description-<?php echo $disciplinaryData['id']; ?>" name="issue_description" rows="3" placeholder="Describe the issue"><?php echo htmlspecialchars($issueDescription); ?></textarea>
+            <textarea id="issue-description-<?php echo $disciplinaryData['id']; ?>" name="issue_description" rows="3" placeholder="Describe the issue"><?php echo safe_htmlspecialchars($issueDescription); ?></textarea>
         </div>
 
         <div style="margin-bottom: 10px;">
             <label for="action-taken-<?php echo $disciplinaryData['id']; ?>">Action Taken:</label>
-            <textarea id="action-taken-<?php echo $disciplinaryData['id']; ?>" name="action_taken" rows="2" placeholder="Describe action taken"><?php echo htmlspecialchars($actionTaken); ?></textarea>
+            <textarea id="action-taken-<?php echo $disciplinaryData['id']; ?>" name="action_taken" rows="2" placeholder="Describe action taken"><?php echo safe_htmlspecialchars($actionTaken); ?></textarea>
         </div>
 
         <div style="margin-bottom: 10px;">
             <label for="staff-handle-<?php echo $disciplinaryData['id']; ?>">Staff Handle:</label>
-            <textarea id="staff-handle-<?php echo $disciplinaryData['id']; ?>" name="staff_handle_name" rows="2" placeholder="Enter staff name"><?php echo htmlspecialchars($staffHandle); ?></textarea>
+            <textarea id="staff-handle-<?php echo $disciplinaryData['id']; ?>" name="staff_handle_name" rows="2" placeholder="Enter staff name"><?php echo safe_htmlspecialchars($staffHandle); ?></textarea>
         </div>
 
         <br>
@@ -516,7 +509,7 @@ while ($disciplinaryData = $result->fetch_assoc()) {
 
         <div class="disciplinary-proof mt-5">
             <?php if ($documentUpload && file_exists('./student_details/disciplinary_issues_doc/' . $documentUpload)): ?>
-                <iframe src="./student_details/disciplinary_issues_doc/<?php echo htmlspecialchars($documentUpload); ?>" width="100%" height="600px" frameborder="0" style="border: none; margin-top: 20px;"></iframe>
+                <iframe src="./student_details/disciplinary_issues_doc/<?php echo safe_htmlspecialchars($documentUpload); ?>" width="100%" height="600px" frameborder="0" style="border: none; margin-top: 20px;"></iframe>
             <?php else: ?>
                 <p style="color: red; font-weight: bold; margin-top: 30px;">File not found</p>
             <?php endif; ?>
