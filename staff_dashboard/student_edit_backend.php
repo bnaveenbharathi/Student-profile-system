@@ -353,64 +353,47 @@ elseif ($formName == 'family_photo') {
             echo "Error updating basic details: " . $conn->error;
         }
 }
-elseif($formName == 'disciplinary_issues_update' && !empty($issue_id)){
-    $issue_id = isset($_GET['issue_id']) ? $_GET['issue_id'] : '';
-    $issueDate = $_POST['issue_date'];
-        $issueDescription = $_POST['issue_description'];
-        $actionTaken = $_POST['action_taken'];
-        $staffHandle = $_POST['staff_handle_name'];
-        $documentUpload = '';
+elseif($formName=='disciplinary_issues'){
+    $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : '';
+      $issue_date = $_POST['issue_date'];
+      $issue_description = $_POST['issue_description'];
+      $action_taken = $_POST['action_taken'];
+      $staff_handle = $_POST['Staff_Handle']; 
 
-        // Handle file upload
-        if (isset($_FILES['document_upload']) && $_FILES['document_upload']['error'] == 0) {
-            // File path and validation
-            $uploadDir = './student_details/disciplinary_issues_doc/';
-            $documentUpload = $_FILES['document_upload']['name'];
-            $uploadPath = $uploadDir . $documentUpload;
+      $uniqueFileName = null;
+      if (isset($_FILES['Document_upload']) && $_FILES['Document_upload']['error'] === UPLOAD_ERR_OK) {
+          $fileTmpPath = $_FILES['Document_upload']['tmp_name'];
+          $originalFileName = $_FILES['Document_upload']['name'];
+          $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+          $uniqueFileName = uniqid('doc_', true) . '.' . $fileExtension;
+          $filePath = './student_details/disciplinary_issues_doc/' . $uniqueFileName;
 
-            // Only allow PDF files
-            if (pathinfo($documentUpload, PATHINFO_EXTENSION) == 'pdf') {
-                move_uploaded_file($_FILES['document_upload']['tmp_name'], $uploadPath);
-            } else {
-                echo "Only PDF files are allowed.";
-                exit();
-            }
-        }
+          if (move_uploaded_file($fileTmpPath, $filePath)) {
+              echo "File uploaded successfully!";
+          } else {
+              echo "Error uploading the file.";
+          }
+      }
 
-        $sqlUpdateDisciplinaryIssues = "UPDATE disciplinary_issues SET 
-                                            issue_date = ?, 
-                                            issue_description = ?, 
-                                            action_taken = ?, 
-                                            staff_handle = ?, 
-                                            document_upload = ? 
-                                        WHERE id = ?";
+      $sqlInsertIssue = "INSERT INTO disciplinary_issues (student_roll_no, issue_date, issue_description, action_taken, staff_handle, document_upload) 
+                         VALUES (?, ?, ?, ?, ?, ?)";
+      $stmtInsert = $conn->prepare($sqlInsertIssue);
+      $stmtInsert->bind_param("ssssss", $roll_no, $issue_date, $issue_description, $action_taken, $staff_handle, $uniqueFileName);
 
-        $stmt = $conn->prepare($sqlUpdateDisciplinaryIssues);
-        $stmt->bind_param('sssssi', $issueDate, $issueDescription, $actionTaken, $staffHandle, $documentUpload, $issue_id);
+      if ($stmtInsert->execute()) {
+          echo "Disciplinary issue added successfully!";
+        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
 
-        if ($stmt->execute()) {
-            echo "Disciplinary issue updated successfully.";
-        } else {
-            echo "Error updating disciplinary issue: " . $stmt->error;
-        }
-    }
-    elseif($formName == 'disciplinary_issues_update' && !empty($issue_id)){
-        $sqlDeleteDisciplinaryIssue = "DELETE FROM disciplinary_issues WHERE id = ?";
-        $stmt = $conn->prepare($sqlDeleteDisciplinaryIssue);
-        $stmt->bind_param('i', $issue_id);
-
-        if ($stmt->execute()) {
-            echo "Disciplinary issue deleted successfully.";
-            // Redirect to avoid resubmission
-            header("Location: student_edit.php?roll_no=" . urlencode($roll_no));
-            exit();
-        } else {
-            echo "Error deleting disciplinary issue: " . $stmt->error;
-        }
-    }
-
+          exit();
+      } else {
+          echo "Error inserting data into the database: " . $stmtInsert->error;
+      }
+  }
 
 }
+
+
+
 $profilePhoto = isset($student['profile_photo']) && $student['profile_photo'] !== NULL ? $student['profile_photo'] : '';
 $profilePath = "./student_details/student_photo/" . $profilePhoto;
 $imageFound = file_exists($profilePath);
