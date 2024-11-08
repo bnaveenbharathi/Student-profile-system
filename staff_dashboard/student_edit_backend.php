@@ -186,87 +186,71 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 elseif ($formName == 'student_photo') {
-    $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : null;
-    $studentPhoto = null;
+    $roll_no = $_GET['roll_no'] ?? null;
+    $studentPhoto = $_FILES['student-photo']['name'] ?? null;
 
-    // Handle student photo upload
-    if (isset($_FILES['student-photo']) && $_FILES['student-photo']['error'] == 0) {
-        $studentPhoto = $_FILES['student-photo']['name'];
-        $studentPhotoPath = './student_details/student_photo/' . $studentPhoto;
-        
-        // Check for valid image format
-        if (in_array(pathinfo($studentPhoto, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
+    if ($studentPhoto && $_FILES['student-photo']['error'] == UPLOAD_ERR_OK) {
+        $fileExtension = pathinfo($studentPhoto, PATHINFO_EXTENSION);
+
+        $uniqueFileName = pathinfo($studentPhoto, PATHINFO_FILENAME) . '_' . time() . '.' . $fileExtension;
+        $studentPhotoPath = "./student_details/student_photo/" . $uniqueFileName;
+
+        if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png'])) {
             if (move_uploaded_file($_FILES['student-photo']['tmp_name'], $studentPhotoPath)) {
-                echo "Student photo uploaded successfully.";
+                $sqlUpdatePhotos = "UPDATE students SET profile_photo = ? WHERE roll_no = ?";
+                $stmt = $conn->prepare($sqlUpdatePhotos);
+                $stmt->bind_param('ss', $uniqueFileName, $roll_no);
+
+                if ($stmt->execute()) {
+                    echo "Student photo updated successfully.";
+                    header("Refresh: 2; URL=./student_edit.php?roll_no=$roll_no");
+                } else {
+                    echo "Database error: Unable to update photo.";
+                }
             } else {
-                echo "Error uploading student photo.";
-                exit();
+                echo "Error moving uploaded file.";
             }
         } else {
-            echo "Invalid student photo format. Only jpg, png, and jpeg are allowed.";
-            exit();
+            echo "Invalid file format. Only JPG, PNG, and JPEG are allowed.";
         }
-    }
-
-
-    // Update the student profile photos in the database
-    $sqlUpdatePhotos = "
-    UPDATE students 
-    SET profile_photo = ?
-    WHERE roll_no = ?";
-
-    $stmt = $conn->prepare($sqlUpdatePhotos);
-    $stmt->bind_param('ss', $studentPhoto,$roll_no);
-
-    if ($stmt->execute()) {
-        echo "Photos updated successfully.";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
     } else {
-        echo "Error updating photos: " . $conn->error;
+        echo "File upload error: " . $_FILES['student-photo']['error'];
     }
 }
 
 elseif ($formName == 'family_photo') {
-    $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : null;
- 
-    $familyPhoto = null;
+    $roll_no = $_GET['roll_no'] ?? null;
+    $familyPhoto = $_FILES['family-photo']['name'] ?? null;
 
+    if ($familyPhoto && $_FILES['family-photo']['error'] == UPLOAD_ERR_OK) {
+        $fileExtension = pathinfo($familyPhoto, PATHINFO_EXTENSION);
 
-    // Handle family photo upload
-    if (isset($_FILES['family-photo']) && $_FILES['family-photo']['error'] == 0) {
-        $familyPhoto = $_FILES['family-photo']['name'];
-        $familyPhotoPath = './student_details/family_photo/' . $familyPhoto;
-        
-        // Check for valid image format
-        if (in_array(pathinfo($familyPhoto, PATHINFO_EXTENSION), ['jpg', 'png', 'jpeg'])) {
+        $uniqueFileName = pathinfo($familyPhoto, PATHINFO_FILENAME) . '_' . time() . '.' . $fileExtension;
+        $familyPhotoPath = "./student_details/family_photo/" . $uniqueFileName;
+
+        if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png'])) {
             if (move_uploaded_file($_FILES['family-photo']['tmp_name'], $familyPhotoPath)) {
-                echo "Family photo uploaded successfully.";
+                $sqlUpdatePhotos = "UPDATE students SET family_photo = ? WHERE roll_no = ?";
+                $stmt = $conn->prepare($sqlUpdatePhotos);
+                $stmt->bind_param('ss', $uniqueFileName, $roll_no);
+
+                if ($stmt->execute()) {
+                    echo "Family photo updated successfully.";
+                    header("Refresh: 2; URL=./student_edit.php?roll_no=$roll_no");
+                } else {
+                    echo "Database error: Unable to update photo.";
+                }
             } else {
-                echo "Error uploading family photo.";
-                exit();
+                echo "Error moving uploaded file.";
             }
         } else {
-            echo "Invalid family photo format. Only jpg, png, and jpeg are allowed.";
-            exit();
+            echo "Invalid file format. Only JPG, PNG, and JPEG are allowed.";
         }
-    }
-
-    // Update the student profile photos in the database
-    $sqlUpdatePhotos = "
-    UPDATE students 
-    SET family_photo = ? 
-    WHERE roll_no = ? ";
-
-    $stmt = $conn->prepare($sqlUpdatePhotos);
-    $stmt->bind_param('ss', $familyPhoto, $roll_no);
-
-    if ($stmt->execute()) {
-        echo "Photos updated successfully.";
-        header("Location: ./student_edit.php?roll_no=$student[roll_no]");
     } else {
-        echo "Error updating photos: " . $conn->error;
+        echo "File upload error: " . $_FILES['family-photo']['error'];
     }
 }
+
 
     // CGPA SECTION
 
@@ -427,13 +411,12 @@ elseif($formName == 'disciplinary_issues_update' && !empty($issue_id)){
 
 
 }
-
-
 $profilePath = "./student_details/student_photo/" . htmlspecialchars($student['profile_photo']);
 $imageFound = file_exists($profilePath);
 
 $familyPath = "./student_details/family_photo/" . htmlspecialchars($student['family_photo']);
 $family_imageFound = file_exists($familyPath);
+
 
 
 ?>
