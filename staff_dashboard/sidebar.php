@@ -1,3 +1,27 @@
+<?php
+session_start();
+
+function logout() {
+    // Unset all session variables
+    session_unset();
+
+    // Destroy the session
+    session_destroy();
+
+    // Redirect to the login page after logging out
+    header("Location: ../staff_login.php");
+    exit();
+}
+
+if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+    logout(); // Call the logout function if the logout parameter is set
+}
+
+?>
+
+
+
+
 <nav>
         <div class="logo-name">
             <div class="logo-image">
@@ -28,7 +52,7 @@
             </ul>
             
             <ul class="logout-mode">
-                <li><a href="#">
+                <li><a href="sidebar.php?logout=true">
                     <i class="uil uil-signout"></i>
                     <span class="link-name">Logout</span>
                 </a></li>
