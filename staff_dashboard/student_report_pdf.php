@@ -97,11 +97,7 @@ $pdf->Cell(0, 10, 'Student Photo: ', 0, 1);
 $pdf->Image('../static/img/' . $student["profile_photo"], 60, 180, 40, 40, '', '', '', true, 150, '', false, false, 1, false, false, false);
 
 // Disciplinary Issues
-$pdf->Cell(0, 10, 'Disciplinary Issues:', 0, 1);
-$pdf->Cell(0, 10, 'Issue Date: ' . $student["issue_date"], 0, 1);
-$pdf->Cell(0, 10, 'Issue Description: ' . $student["issue_description"], 0, 1);
-$pdf->Cell(0, 10, 'Action Taken: ' . $student["action_taken"], 0, 1);
-$pdf->Cell(0, 10, 'Staff Handle: ' . $student["staff_handle"], 0, 1);
+
 
 // Output the PDF to the browser for download
 $pdf->Output('student_profile_' . $student['roll_no'] . '.pdf', 'D');

@@ -325,31 +325,38 @@ elseif ($formName == 'family_photo') {
     }
     
     elseif ($formName == 'parents_details') {
-        $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : '';
+    $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : '';
     $fatherName = $_POST['Father_name'];
     $fatherOccupation = $_POST['Father_occupation'];
+    $fatherage = $_POST['father_age'];
     $fatherMobile = $_POST['father_Mobile_number'];
     $motherName = $_POST['Mother_name'];
     $motherOccupation = $_POST['Mother_occupation'];
+    $motherage = $_POST['motherage'];
+    
     $motherMobile = $_POST['mother_Mobile_number'];
 
         $sqlUpdateBasicDetails = "
         UPDATE students SET 
         father_name = ?, 
-        father_occupation = ?, 
+        father_occupation = ?,
+        father_age = ?, 
         father_phone = ?, 
         mother_name = ?, 
+        mother_age=?,
         mother_occupation = ?, 
         mother_phone = ?
         WHERE roll_no = ?";
 
         $stmt = $conn->prepare($sqlUpdateBasicDetails);
         $stmt->bind_param(
-            'sssssss',
+            'sssssssss',
             $fatherName,
             $fatherOccupation,
+            $fatherage,
             $fatherMobile,
             $motherName,
+            $motherage,
             $motherOccupation,
             $motherMobile,
             $roll_no
@@ -423,8 +430,6 @@ elseif($formName == 'disciplinary_issues_update' && !empty($issue_id)){
 
 
 
-$docPath = "./student_details/disciplinary_issues_doc/" . htmlspecialchars($student['document_upload']);
-$docfile = file_exists($docPath);
 
 $profilePath = "./student_details/student_photo/" . htmlspecialchars($student['profile_photo']);
 $imageFound = file_exists($profilePath);
@@ -815,7 +820,7 @@ $parent_details = $result->fetch_assoc();
 
                         <div>
                             <label for="Age">Age</label>
-                            <input type="number" id="Age" name="Age" placeholder="<?php echo htmlspecialchars($parent_details['father_age']); ?>">
+                            <input type="number" id="Age" name="father_age" placeholder="<?php echo htmlspecialchars($parent_details['father_age']); ?>">
                         </div>
 
                         <div>
@@ -836,7 +841,7 @@ $parent_details = $result->fetch_assoc();
 </div>
                         <div>
                             <label for="Age">Age</label>
-                            <input type="number" id="Age" name="Age" placeholder="<?php echo htmlspecialchars($parent_details['mother_age']); ?>" >
+                            <input type="number" id="Age" name="motherage" placeholder="<?php echo htmlspecialchars($parent_details['mother_age']); ?>" >
                         </div>
 
                         <div>
@@ -966,19 +971,7 @@ while ($disciplinaryData = $result->fetch_assoc()) {
                     <div class="disciplinary-proof mt-5">
 
                     
-                    <?php
-$filePath = './student_details/disciplinary_issues_doc/' . htmlspecialchars($student['document_upload']);
-if (file_exists($filePath) && !empty($student['document_upload'])): ?>
-    <iframe 
-        src="<?php echo $filePath; ?>" 
-        width="100%" 
-        height="600px" 
-        frameborder="0" 
-        style="border: none; margin-top: 20px;">
-    </iframe>
-<?php else: ?>
-    <p style="color: red; font-weight: bold; margin-top: 30px;">File not found</p>
-<?php endif; ?>
+                   
 
 
                         
