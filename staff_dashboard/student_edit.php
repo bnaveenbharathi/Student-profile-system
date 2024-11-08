@@ -236,6 +236,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo "Error updating photos and document: " . $conn->error;
         }
     }
+
+    // CGPA SECTION
+
+    elseif($formName == 'cgpa_section'){
+        $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : '';
+        $cgpaSemesters = [
+            $_POST['cgpa_sem1'],
+            $_POST['cgpa_sem2'],
+            $_POST['cgpa_sem3'],
+            $_POST['cgpa_sem4'],
+            $_POST['cgpa_sem5'],
+            $_POST['cgpa_sem6'],
+            $_POST['cgpa_sem7'],
+            $_POST['cgpa_sem8']
+        ];
+        $cgpa = $_POST['total_CGPA'];
+    
+        // Update the CGPA data
+        $sqlUpdateCGPA = "
+            UPDATE student_cgpa 
+            SET 
+                cgpa_sem1 = ?, 
+                cgpa_sem2 = ?, 
+                cgpa_sem3 = ?, 
+                cgpa_sem4 = ?, 
+                cgpa_sem5 = ?, 
+                cgpa_sem6 = ?, 
+                cgpa_sem7 = ?, 
+                cgpa_sem8 = ?, 
+                cgpa_cumulative = ? 
+            WHERE student_roll_no = ?";
+    
+        $stmt = $conn->prepare($sqlUpdateCGPA);
+        $stmt->bind_param(
+            'ddddddddds',
+            $cgpaSemesters[0],
+            $cgpaSemesters[1],
+            $cgpaSemesters[2],
+            $cgpaSemesters[3],
+            $cgpaSemesters[4],
+            $cgpaSemesters[5],
+            $cgpaSemesters[6],
+            $cgpaSemesters[7],
+            $cgpa,
+            $roll_no
+        );
+    
+        if ($stmt->execute()) {
+            echo "CGPA data updated successfully.";
+            header("Location: ./student_edit.php?roll_no=$student[roll_no]");
+        } else {
+            echo "Error updating CGPA data: " . $conn->error;
+        }
+
+    }
 }
 ?>
 
@@ -466,52 +521,86 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- CGPA INSERT UPDATE DELETE -->
 <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  name="cgpa_section">
+<input type="hidden" name="form_name" value="cgpa_section">
+<?php
+ $roll_no = isset($_GET['roll_no']) ? $_GET['roll_no'] : '';
+
+// Fetch the existing CGPA data
+$sqlFetchCGPA = "SELECT * FROM student_cgpa WHERE student_roll_no = ?";
+$stmt = $conn->prepare($sqlFetchCGPA);
+$stmt->bind_param('s', $roll_no);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$cgpaData = $result->fetch_assoc();
+
+// Check if the CGPA data exists
+if ($cgpaData) {
+    $cgpaSemesters = [
+        $cgpaData['cgpa_sem1'],
+        $cgpaData['cgpa_sem2'],
+        $cgpaData['cgpa_sem3'],
+        $cgpaData['cgpa_sem4'],
+        $cgpaData['cgpa_sem5'],
+        $cgpaData['cgpa_sem6'],
+        $cgpaData['cgpa_sem7'],
+        $cgpaData['cgpa_sem8']
+    ];
+    $cgpa = $cgpaData['cgpa_cumulative'];
+} else {
+    // If no CGPA data exists for the student, initialize variables
+    $cgpaSemesters = [null, null, null, null, null, null, null, null];
+    $cgpa = null;
+}?>
                     <label for="gpa">GPA</label><br>
 
                     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
-                        <div>
-                            <label for="gpa">sem 1</label><br>
-                            <input type="number" id="gpa" name="cgpa_sem1" step="0.01" min="0" max="10"> <br>
+        <div>
+            <label for="gpa">sem 1</label><br>
+            <input type="number" id="gpa" name="cgpa_sem1" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[0]); ?>"> <br>
+        </div>
 
-                        </div>
+        <div>
+            <label for="gpa">sem 2</label><br>
+            <input type="number" id="gpa" name="cgpa_sem2" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[1]); ?>"> <br>
+        </div>
+    </div><br>
 
-                        <div>
-                            <label for="gpa">sem 2</label><br>
-                            <input type="number" id="gpa" name="cgpa_sem2" step="0.01" min="0" max="10"> <br>
-                        </div>
-                    </div><br>
-                    <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
-                        <div>
-                            <label for="gpa">sem 3</label><br>
-                            <input type="number" id="gpa" name="cgpa_sem3" step="0.01" min="0" max="10"> <br>
-                        </div>
-                        <div>
-                            <label for="gpa">sem 4</label><br>
-                            <input type="number" id="gpa" name="cgpa_sem4" step="0.01" min="0" max="10"> <br>
-                        </div>
-                    </div><br>
-                    <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
-                        <div>
-                            <label for="gpa">sem 5</label><br>
-                            <input type="number" id="gpa" name="cgpa_sem5" step="0.01" min="0" max="10"> <br>
-                        </div>
-                        <div>
-                            <label for="gpa">sem 6</label><br>
-                            <input type="number" id="gpa" name="cgpa_sem6" step="0.01" min="0" max="10"> <br>
-                        </div>
-                    </div><br>
-                    <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
-                        <div>
-                            <label for="gpa">sem 7</label><br>
-                            <input type="number" id="gpa" name="cgpa_sem7" step="0.01" min="0" max="10"> <br>
-                        </div>
-                        <div>
-                            <label for="gpa">sem 8 </label><br>
-                            <input type="number" id="gpa" name="cgpa_sem8" step="0.01" min="0" max="10"> <br>
-                        </div>
-                    </div><br><br>
-                    <label for="CGPA">CGPA</label><br>
-                    <input type="number" id="CGPA" name="total_CGPA" step="0.01" min="0" max="10"> <br>
+    <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+        <div>
+            <label for="gpa">sem 3</label><br>
+            <input type="number" id="gpa" name="cgpa_sem3" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[2]); ?>"> <br>
+        </div>
+        <div>
+            <label for="gpa">sem 4</label><br>
+            <input type="number" id="gpa" name="cgpa_sem4" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[3]); ?>"> <br>
+        </div>
+    </div><br>
+
+    <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+        <div>
+            <label for="gpa">sem 5</label><br>
+            <input type="number" id="gpa" name="cgpa_sem5" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[4]); ?>"> <br>
+        </div>
+        <div>
+            <label for="gpa">sem 6</label><br>
+            <input type="number" id="gpa" name="cgpa_sem6" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[5]); ?>"> <br>
+        </div>
+    </div><br>
+
+    <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 10px;">
+        <div>
+            <label for="gpa">sem 7</label><br>
+            <input type="number" id="gpa" name="cgpa_sem7" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[6]); ?>"> <br>
+        </div>
+        <div>
+            <label for="gpa">sem 8 </label><br>
+            <input type="number" id="gpa" name="cgpa_sem8" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpaSemesters[7]); ?>"> <br>
+        </div>
+    </div><br><br>
+
+    <label for="CGPA">CGPA</label><br>
+    <input type="number" id="CGPA" name="total_CGPA" step="0.01" min="0" max="10" value="<?php echo htmlspecialchars($cgpa); ?>"> <br>
 
                     <button type="submit" class="submit-btn">Update</button>
 
@@ -520,7 +609,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-<!--  -->
+
 <form action="student_edit.php?roll_no=<?php echo urlencode($student['roll_no']); ?>" method="POST" enctype="multipart/form-data"  name="photo_person">
 
                     <label for="family-photo">Student Photo:</label><br>
