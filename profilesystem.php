@@ -55,7 +55,7 @@ $stmt->close();
         integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/181ea7bd20.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <!-- <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> -->
     <!-- style -->
     <link rel="stylesheet" href="./static/css/bg.css">
     <link rel="stylesheet" href="./static/css/profilepage.css">
@@ -117,7 +117,10 @@ $stmt->close();
             <div id="occupation" class="box" data-aos="zoom-out" data-aos-duration="1000">
 
                 <h2 class="font1"  style="color: #7ad100;">Occupation</h2>
-                <!-- <h3 class="font2 mt-2"><?php echo htmlspecialchars($user["occupation"]); ?></h3> -->
+                <h3 class="font2 mt-2">
+                    Full Stack Developer
+                    <?php // echo htmlspecialchars($user["occupation"]); ?>
+                </h3>
 
             </div>
             <div class="box" id="sociallinks" data-aos="zoom-out">

@@ -132,8 +132,8 @@ if (!$result) {
                             <td>
                                 <a href="student_view.php?roll_no=<?php echo urlencode($row['roll_no']); ?>" class="action-btn">View Profile</a>
                                 <a href="student_edit.php?roll_no=<?php echo urlencode($row['roll_no']); ?>" class="action-btn" style="background-color: #f39c12;">Edit</a>
-                            </td>
-                        </tr>
+                                <a href="student_report_pdf.php?student_report_pdf=true&roll_no=<?php echo htmlspecialchars($row['roll_no']); ?>" class="action-btn">Download PDF</a>
+                                </tr>
                     <?php endwhile; ?>
                 </tbody>
             </table>
