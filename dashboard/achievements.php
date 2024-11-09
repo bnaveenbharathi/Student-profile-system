@@ -1,205 +1,222 @@
+<?php
+include("../resources/connection.php");
+session_start();
+
+if (!isset($_SESSION['roll_no'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$roll_no = $_SESSION['roll_no'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    $action = $_POST['action'];
+
+    if ($action === 'insert') {
+        $name = $_POST['name'];
+        $description = $_POST['description'];
+        $link = $_POST['link'];
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $_FILES['image']['tmp_name'];
+            $originalFileName = $_FILES['image']['name'];
+            $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+            $uniqueFileName = $roll_no . '_' . time() . '.' . $fileExtension;
+            $filePath = './uploads/achievements/' . $uniqueFileName;
+
+            move_uploaded_file($fileTmpPath, $filePath);
+
+            $stmt = $conn->prepare("INSERT INTO achievements (student_roll_no, name, photo, description, link) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssss", $roll_no, $name, $uniqueFileName, $description, $link);
+            $stmt->execute();
+            $stmt->close();
+            header("Location: achievements.php");
+            exit();
+        }
+    } elseif ($action === 'update') {
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $description = $_POST['description'];
+        $link = $_POST['link'];
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $_FILES['image']['tmp_name'];
+            $originalFileName = $_FILES['image']['name'];
+            $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+            $uniqueFileName = $roll_no . '_' . time() . '.' . $fileExtension;
+            $filePath = './uploads/achievements/' . $uniqueFileName;
+
+            move_uploaded_file($fileTmpPath, $filePath);
+
+            $stmt = $conn->prepare("UPDATE achievements SET name=?, photo=?, description=?, link=? WHERE id=? AND student_roll_no=?");
+            $stmt->bind_param("sssssi", $name, $uniqueFileName, $description, $link, $id, $roll_no);
+        } else {
+            $stmt = $conn->prepare("UPDATE achievements SET name=?, description=?, link=? WHERE id=? AND student_roll_no=?");
+            $stmt->bind_param("sssii", $name, $description, $link, $id, $roll_no);
+        }
+
+        $stmt->execute();
+        $stmt->close();
+        header("Location: achievements.php");
+        exit();
+    } elseif ($action === 'delete') {
+        $id = $_POST['id'];
+
+        $stmt = $conn->prepare("DELETE FROM achievements WHERE id=? AND student_roll_no=?");
+        $stmt->bind_param("is", $id, $roll_no);
+        $stmt->execute();
+        $stmt->close();
+        header("Location: achievements.php");
+        exit();
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM achievements WHERE student_roll_no = ?");
+$stmt->bind_param("s", $roll_no);
+$stmt->execute();
+$achievements = $stmt->get_result();
+$stmt->close();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-
     <link rel="stylesheet" href="../static/dash/style.css">
     <link rel="stylesheet" href="../static/dash/achievements.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-
-    <title>Dashboard | Achievements</title> 
+    <title>Dashboard | Achievements</title>
     <style>
-    p a{
-    color: #4CAF50;
-    text-decoration: none ;}
-     /* Button styling */
-     .edit-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        
-        /* Popup background */
-        .popup {
-            display: none; /* Hidden by default */
+        .edit-popup {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
-            z-index: 1000; /* Ensure popup is on top */
         }
-
-        /* Popup content */
-        .popup-content {
+        .edit-popup .popup-content {
             background-color: #fff;
             padding: 20px;
-            width: 400px;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-            text-align: center;
+            width: 90%;
+            max-width: 500px;
         }
-
-        /* Close button */
         .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            float: right;
             font-size: 24px;
             cursor: pointer;
-            color: #333;
         }
-
-        /* Form styling */
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .submit-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-</style>
+    </style>
 </head>
 <body>
-     
+
 <?php include("./sidebar.php") ?>
 
-        <div class="dash-content">
-            <div class="overview">
-                <div class="title">
-                <i class="uil uil-user"></i>
+<div class="dash-content">
+    <div class="overview">
+        <div class="title">
+            <i class="uil uil-user"></i>
+            <span class="text">Achievements</span>
+        </div>
 
-                    <span class="text">Achievements</span>
+        <div class="container-Achievements">
+            <div class="form-container">
+                <h1>Achievements</h1>
+
+                <form action="achievements.php" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="insert">
+                    <label for="name">Achievement Name:</label>
+                    <input type="text" name="name" required>
+
+                    <label for="image">Upload Image:</label>
+                    <input type="file" name="image" accept="image/*" required>
+
+                    <label for="description">Description:</label>
+                    <textarea name="description" required></textarea>
+
+                    <label for="link">Link:</label>
+                    <input type="url" name="link">
+
+                    <button type="submit" class="edit-button">Add Achievement</button>
+                </form>
+
+                <h2 style="margin-top: 30px;">Your Achievements</h2>
+                <div class="achievements-list">
+                    <?php while ($row = $achievements->fetch_assoc()) { ?>
+                        <div class="achievement-item">
+                            <h3><?php echo htmlspecialchars($row['name']); ?></h3>
+                            <img src="./uploads/achievements/<?php echo htmlspecialchars($row['photo']); ?>" alt="Achievement Image" width="200px">
+                            <p><?php echo htmlspecialchars($row['description']); ?></p>
+                            <a href="<?php echo htmlspecialchars($row['link']); ?>">Learn More</a>
+
+                            <div class="achievement-actions">
+                                <button type="button" onclick="toggleEditForm(<?php echo $row['id']; ?>)" class="edit-button">Edit</button>
+                                <form action="achievements.php" method="POST">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                    <button type="submit" class="edit-button">Delete</button>
+                                </form>
+                            </div>
+
+                            <div id="editForm<?php echo $row['id']; ?>" class="edit-popup">
+                                <div class="popup-content">
+                                    <span class="close" onclick="closeEditForm(<?php echo $row['id']; ?>)">&times;</span>
+                                    <h2>Edit Achievement</h2>
+                                    <form action="achievements.php" method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" name="action" value="update">
+                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+
+                                        <label>Achievement Name:</label>
+                                        <input type="text" name="name" value="<?php echo htmlspecialchars($row['name']); ?>" required>
+
+                                        <label>Upload New Image:</label>
+                                        <input type="file" name="image" accept="image/*">
+
+                                        <label>Description:</label>
+                                        <textarea name="description" required><?php echo htmlspecialchars($row['description']); ?></textarea>
+
+                                        <label>Link:</label>
+                                        <input type="url" name="link" value="<?php echo htmlspecialchars($row['link']); ?>">
+
+                                        <button type="submit" class="edit-button">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
-               
-                <!-- Achievements  -->
-                 <div class="container-Achievements">
-
-                 <div class="form-container">
-        <h1>Add Achievement</h1>
-        <form id="achievement-form">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
             </div>
-            <div class="form-group">
-                <label for="image">Image URL:</label>
-                <input type="file" id="image" name="image" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="link">Link:</label>
-                <input type="url" id="link" name="link" required>
-            </div>
-            <button type="submit" class="submit-button">Submit</button>
-        </form>
-    </div>
-    <div class="form-container Achievements">
-    <h1>Achievements</h1>
-     <!-- Edit Button -->
-     <button class="edit-button" onclick="openPopup()">Edit</button>
-
-<!-- Popup Container -->
-<div id="editPopup" class="popup">
-    <div class="popup-content">
-        <span class="close" onclick="closePopup()">&times;</span>
-        <h2>Edit Achievement</h2>
-        <form id="edit-form">
-            <div class="form-group">
-                <label for="edit-name">Name of the Achievement:</label>
-                <input type="text" id="edit-name" name="edit-name" required>
-            </div>
-            <div class="form-group">
-                <label for="edit-image">Add Image:</label>
-                <input type="file" id="edit-image" name="edit-image" required>
-            </div>
-            <div class="form-group">
-                <label for="edit-description">Description:</label>
-                <textarea id="edit-description" name="edit-description" required></textarea>
-            </div>
-            <button type="submit" class="submit-button">Save Changes</button>
-        </form>
+        </div>
     </div>
 </div>
 
+<script src="../static/dash/script.js"></script>
 <script>
-        function openPopup() {
-            document.getElementById("editPopup").style.display = "flex";
-        }
+    function toggleEditForm(id) {
+        document.getElementById(`editForm${id}`).style.display = 'flex';
+    }
 
-        function closePopup() {
-            document.getElementById("editPopup").style.display = "none";
-        }
+    function closeEditForm(id) {
+        document.getElementById(`editForm${id}`).style.display = 'none';
+    }
 
-        // Close popup if clicked outside content
-        window.onclick = function(event) {
-            const popup = document.getElementById("editPopup");
-            if (event.target == popup) {
-                popup.style.display = "none";
+    window.onclick = function(event) {
+        const popups = document.getElementsByClassName("edit-popup");
+        for (let i = 0; i < popups.length; i++) {
+            if (event.target === popups[i]) {
+                popups[i].style.display = "none";
             }
         }
+    };
 </script>
 
-
-
-    <div class="achievements-list">
-        <h3>Name</h3>
-        <img src="../static/img/profile.png" alt="" width="280px" style="object-fit: cover;">
-        <textarea name="" id="" readonly>
-            welcome
-        </textarea>
-        <p >
-            <a href="">Click Here</a>
-        </p>
-    </div>
-    
-          
-    </div>
-
-
-                 </div>
-              
-
-
-            </div>
-    </section>
-
-    <script src="../static/dash/script.js"></script>
 </body>
 </html>
