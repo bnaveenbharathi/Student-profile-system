@@ -85,14 +85,7 @@ $stmt->close();
             <strong>Email:</strong>
             <span><?php echo htmlspecialchars($user["email"]);?></span>
         </div>
-        <div class="info-box">
-            <strong>GitHub:</strong>
-            <span><a href="<?php echo htmlspecialchars($user["github_link"]);?>" target="_blank">bnaveenbharathi</a></span>
-        </div>
-        <div class="info-box">
-            <strong>LinkedIn:</strong>
-            <span><a href="<?php echo htmlspecialchars($user["linkedin_link"]); ?>" target="_blank">bnaveenbharathi</a></span>
-        </div>
+      
       
         <div class="info-box">
             <strong>Department:</strong>
@@ -103,17 +96,21 @@ $stmt->close();
             <span><?php echo htmlspecialchars($user["year"]); ?></span>
         </div>
         <div class="info-box">
-            <strong>Semester:</strong>
-            <span><?php echo htmlspecialchars($user["semester"]); ?></span>
+            <strong>Branch:</strong>
+            <span><?php echo htmlspecialchars($user["branch"]); ?></span>
         </div>
         <div class="info-box">
             <strong>Skills:</strong>
             <span><?php echo htmlspecialchars($user["skills"]); ?></span>
+        </div>  <div class="info-box">
+            <strong>GitHub:</strong>
+            <span><a href="<?php echo htmlspecialchars($user["github_link"]);?>" target="_blank">bnaveenbharathi</a></span>
         </div>
         <div class="info-box">
-            <strong>Branch:</strong>
-            <span><?php echo htmlspecialchars($user["branch"]); ?></span>
+            <strong>LinkedIn:</strong>
+            <span><a href="<?php echo htmlspecialchars($user["linkedin_link"]); ?>" target="_blank">bnaveenbharathi</a></span>
         </div>
+       
     </div>
 </div>
 
